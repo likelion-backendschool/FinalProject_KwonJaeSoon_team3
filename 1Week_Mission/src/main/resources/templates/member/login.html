@@ -1,10 +1,10 @@
-<h1>회원가입</h1>
+<h1>로그인</h1>
 
 <script>
-    function loginForm__submit(form) {
+    function LoginForm__submit(form) {
         form.username.value = form.username.value.trim();
 
-        if ( form.username.value.length == 0 ) {
+        if (form.username.value.length == 0) {
             alert("아이디를 입력해주세요.");
             form.username.focus();
             return;
@@ -12,7 +12,7 @@
 
         form.password.value = form.password.value.trim();
 
-        if ( form.password.value.length == 0 ) {
+        if (form.password.value.length == 0) {
             alert("비밀번호를 입력해주세요.");
             form.password.focus();
             return;
@@ -24,7 +24,7 @@
 </script>
 
 
-<form th:action method="POST" onsubmit="loginForm__submit(this); return false;">
+<form th:action method="POST" onSubmit="LoginForm__submit(this); return false;">
     <div>
         <span>아이디</span>
         <input type="text" name="username">
