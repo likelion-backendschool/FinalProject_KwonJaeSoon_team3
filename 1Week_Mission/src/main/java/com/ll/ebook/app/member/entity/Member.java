@@ -22,4 +22,5 @@ public class Member extends BaseEntity {
     private String password;
     private String nickname;
     private String email;
+    private int authLevel;
 }

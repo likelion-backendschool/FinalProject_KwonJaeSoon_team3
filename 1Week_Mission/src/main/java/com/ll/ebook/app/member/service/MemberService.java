@@ -24,14 +24,18 @@ public class MemberService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     public Member join(String username, String password, String nickname, String email) {
-        if (memberRepository.findByUsername(username).isPresent()) {
+        int authLevel = 3;
 
+        if( nickname != null) {
+            authLevel = 7;
         }
+
         Member member = Member.builder()
                 .username(username)
                 .password(passwordEncoder.encode(password))
                 .nickname(nickname)
                 .email(email)
+                .authLevel(authLevel)
                 .build();
 
         memberRepository.save(member);
@@ -48,11 +52,11 @@ public class MemberService implements UserDetailsService {
         Member member = memberRepository.findByUsername(username).get();
 
         List<GrantedAuthority> authorities = new ArrayList<>();
-        if (member.getNickname() != null) {
+        if (member.getAuthLevel() == 7) {
             authorities.add(new SimpleGrantedAuthority("writer"));
-        } else {
-            authorities.add(new SimpleGrantedAuthority("member"));
         }
+
+        authorities.add(new SimpleGrantedAuthority("member"));
 
         return new User(member.getUsername(), member.getPassword(), authorities);
     }
