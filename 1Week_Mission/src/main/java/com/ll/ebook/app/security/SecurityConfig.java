@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 @Configuration
 @EnableWebSecurity
@@ -27,6 +28,12 @@ public class SecurityConfig {
                                 .loginPage("/member/login") // GET
                                 .loginProcessingUrl("/member/login") // POST
                                 .defaultSuccessUrl("/member/profile")
+                )
+                .logout(
+                        logout -> logout
+                                .logoutRequestMatcher(new AntPathRequestMatcher("/member/logout"))
+                                .logoutSuccessUrl("/?msg=Logout!!! ")
+                                .invalidateHttpSession(true)
                 );
 
         return http.build();
