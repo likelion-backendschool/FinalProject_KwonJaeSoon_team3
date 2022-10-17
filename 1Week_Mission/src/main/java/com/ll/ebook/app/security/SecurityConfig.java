@@ -17,9 +17,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests().antMatchers("/**")
-                .permitAll()
-                .and()
+                .authorizeRequests(
+                        authorizeRequests -> authorizeRequests
+                                .antMatchers("/**")
+                                .permitAll()
+                )
                 .formLogin(
                         formLogin -> formLogin
                                 .loginPage("/member/login") // GET
