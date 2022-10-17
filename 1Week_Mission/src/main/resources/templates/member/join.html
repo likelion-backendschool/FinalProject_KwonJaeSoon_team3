@@ -18,6 +18,14 @@
             return;
         }
 
+        form.passwordConfirm.value = form.passwordConfirm.value.trim();
+
+        if(form.passwordConfirm.value != form.password.value) {
+            alert("비밀번호가 틀립니다.");
+            form.passwordConfirm.focus();
+            return;
+        }
+
         form.email.value = form.email.value.trim();
 
         if ( form.email.value.length == 0 ) {
@@ -40,6 +48,10 @@
     <div>
         <span>비밀번호</span>
         <input type="password" name="password">
+    </div>
+    <div>
+        <span>비밀번호 확인</span>
+        <input type="password" name="passwordConfirm">
     </div>
     <div>
         <span>별명</span>
