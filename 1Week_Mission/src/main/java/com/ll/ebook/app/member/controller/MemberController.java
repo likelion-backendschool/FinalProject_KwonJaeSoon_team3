@@ -3,8 +3,10 @@ package com.ll.ebook.app.member.controller;
 import com.ll.ebook.app.member.entity.Member;
 import com.ll.ebook.app.member.form.JoinForm;
 import com.ll.ebook.app.member.service.MemberService;
+import com.ll.ebook.app.security.dto.MemberContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,6 +43,10 @@ public class MemberController {
 
         String nickname = joinForm.getNickname();
 
+        if(nickname.equals("")) {
+            nickname = null;
+        }
+
         memberService.join(joinForm.getUsername(), joinForm.getPassword(), nickname, joinForm.getEmail());
 
         try {
@@ -52,11 +58,13 @@ public class MemberController {
         return "redirect:/member/profile";
     }
 
+    @PreAuthorize("isAnonymous()")
     @GetMapping("/login")
     public String showLogin() {
         return "member/login";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/profile")
     public String showProfile(Principal principal, Model model) {
         Member loginedMember = memberService.findMemberByUsername(principal.getName());
@@ -64,5 +72,25 @@ public class MemberController {
         model.addAttribute("loginedMember", loginedMember);
 
         return "member/profile";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modify")
+    public String showModify(@AuthenticationPrincipal MemberContext context, Model model) {
+        Member loginedMember = memberService.findMemberByUsername(context.getUsername());
+
+        model.addAttribute("loginedMember", loginedMember);
+
+        return "member/modify";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/modify")
+    public String modify(@AuthenticationPrincipal MemberContext context, String nickname, String email) {
+        Member member = memberService.findMemberByUsername(context.getUsername());
+
+        memberService.modify(member, nickname, email);
+
+        return "redirect:/member/profile";
     }
 }
