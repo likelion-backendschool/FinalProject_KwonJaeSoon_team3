@@ -39,7 +39,9 @@ public class MemberController {
             return "redirect:/?errorMsg=Already Join";
         }
 
-        memberService.join(joinForm.getUsername(), joinForm.getPassword(), joinForm.getNickname(), joinForm.getEmail());
+        String nickname = joinForm.getNickname();
+
+        memberService.join(joinForm.getUsername(), joinForm.getPassword(), nickname, joinForm.getEmail());
 
         try {
             req.login(joinForm.getUsername(), joinForm.getPassword());
