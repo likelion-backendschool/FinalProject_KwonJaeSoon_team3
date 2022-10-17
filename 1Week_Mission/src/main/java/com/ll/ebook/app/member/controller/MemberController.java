@@ -1,5 +1,6 @@
 package com.ll.ebook.app.member.controller;
 
+import com.ll.ebook.app.contact.service.ContactService;
 import com.ll.ebook.app.member.entity.Member;
 import com.ll.ebook.app.member.form.JoinForm;
 import com.ll.ebook.app.member.service.MemberService;
@@ -13,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +25,7 @@ import java.security.Principal;
 @RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
+    private final ContactService contactService;
     private final PasswordEncoder passwordEncoder;
 
     @PreAuthorize("isAnonymous()")
@@ -74,6 +75,7 @@ public class MemberController {
         return "member/profile";
     }
 
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify")
     public String showModify(@AuthenticationPrincipal MemberContext context, Model model) {
@@ -92,5 +94,69 @@ public class MemberController {
         memberService.modify(member, nickname, email);
 
         return "redirect:/member/profile";
+    }
+
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/modifyPassword")
+    public String showModifyPassword() {
+
+        return "member/modifyPassword";
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/modifyPassword")
+    public String modifyPassword(@AuthenticationPrincipal MemberContext context, String password, String modifyPassword) {
+        Member loginedMember = memberService.findMemberByUsername(context.getUsername());
+
+        if(!passwordEncoder.matches(password, loginedMember.getPassword())) {
+            return "member/modifyPassword";
+        }
+
+        memberService.modifyPassword(loginedMember, modifyPassword);
+
+        return "redirect:/member/profile";
+    }
+
+
+
+    @GetMapping("/findUsername")
+    public String showFindUsername() {
+        return "member/findUsername";
+    }
+
+    @PostMapping("/findUsername")
+    public String findUsername(Model model, String email) {
+        Member member = memberService.findMemberByEmail(email);
+
+        model.addAttribute("member", member);
+
+        return "member/findUsername";
+    }
+
+    @GetMapping("/findPassword")
+    public String showFindPassword() {
+        return "member/findPassword";
+    }
+
+    @PostMapping("/findPassword")
+    public String findPassword(Model model, String username, String email) {
+        Member member = memberService.findMemberByUsernameAndEmail(username, email);
+
+        if(member == null) {
+            return "member/findPassword";
+        }
+
+        String newPassword = "";
+        for(int i = 0; i < 10; i++) {
+            char ran = (char)((int)(Math.random() * 25) + 97);
+            newPassword += ran;
+        }
+
+        memberService.setNewPassword(member, newPassword);
+
+        contactService.sendSimpleMessage(member, newPassword);
+
+        return "redirect:/member/login";
     }
 }

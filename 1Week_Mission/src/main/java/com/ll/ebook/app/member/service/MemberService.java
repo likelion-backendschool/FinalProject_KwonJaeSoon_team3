@@ -2,6 +2,7 @@ package com.ll.ebook.app.member.service;
 
 import com.ll.ebook.app.member.entity.Member;
 import com.ll.ebook.app.member.repository.MemberRepository;
+import com.ll.ebook.app.security.dto.MemberContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -41,6 +42,28 @@ public class MemberService {
     public void modify(Member member, String nickname, String email) {
         member.setNickname(nickname);
         member.setEmail(email);
+
+        memberRepository.save(member);
+    }
+
+    public Member findMemberByEmail(String email) {
+        return memberRepository.findByEmail(email);
+    }
+
+    public Member findMemberByUsernameAndEmail(String username, String email) {
+        return memberRepository.findByUsernameAndEmail(username, email);
+    }
+
+    public void setNewPassword(Member member, String newPassword) {
+        String encodePassword = passwordEncoder.encode(newPassword);
+        member.setPassword(encodePassword);
+
+        memberRepository.save(member);
+    }
+
+    public void modifyPassword(Member member, String newPassword) {
+        String encodePassword = passwordEncoder.encode(newPassword);
+        member.setPassword(encodePassword);
 
         memberRepository.save(member);
     }
