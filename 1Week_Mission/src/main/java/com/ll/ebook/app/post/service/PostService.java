@@ -66,4 +66,12 @@ public class PostService {
 
         post.getExtra().put("hashTags", hashTags);
     }
+
+    public void modify(Post post, String subject, String content, String keywords) {
+        post.setSubject(subject);
+        post.setContent(content);
+        postRepository.save(post);
+
+        hashTagService.applyHashTags(post, keywords);
+    }
 }

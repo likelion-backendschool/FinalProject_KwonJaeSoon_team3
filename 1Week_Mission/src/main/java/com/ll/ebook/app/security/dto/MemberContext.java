@@ -26,4 +26,12 @@ public class MemberContext extends User {
         this.email = member.getEmail();
         this.nickname = member.getNickname();
     }
+
+    public boolean memberIs(Member member) {
+        return id.equals(member.getId());
+    }
+
+    public boolean memberIsNot(Member member) {
+        return memberIs(member) == false;
+    }
 }

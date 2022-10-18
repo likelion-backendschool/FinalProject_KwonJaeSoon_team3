@@ -27,6 +27,26 @@ public class Post extends BaseEntity {
     private String content;
     private String contentHtml;
 
+    public String getExtra_inputValue_hashTagContents() {
+        Map<String, Object> extra = getExtra();
+
+        if (extra.containsKey("hashTags") == false) {
+            return "";
+        }
+
+        List<PostHashTag> hashTags = (List<PostHashTag>) extra.get("hashTags");
+
+        if (hashTags.isEmpty()) {
+            return "";
+        }
+
+        return hashTags
+                .stream()
+                .map(hashTag -> "#" + hashTag.getPostKeywordId().getContent())
+                .sorted()
+                .collect(Collectors.joining(" "));
+    }
+
     public String getExtra_hashTagLinks() {
         Map<String, Object> extra = getExtra();
 
