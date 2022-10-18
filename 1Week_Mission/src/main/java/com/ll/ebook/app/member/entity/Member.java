@@ -23,4 +23,8 @@ public class Member extends BaseEntity {
     private String nickname;
     private String email;
     private int authLevel;
+
+    public Member(long id) {
+        super(id);
+    }
 }

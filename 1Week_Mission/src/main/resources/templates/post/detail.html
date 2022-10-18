@@ -35,6 +35,11 @@
             <div>
                 내용 : [[${post.content}]]
             </div>
+
+            <div>
+                해시태그 :
+                <th:block th:utext="${post.extra_hashTagLinks}"/>
+            </div>
         </div>
     </section>
 </main>

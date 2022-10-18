@@ -28,7 +28,7 @@ public class PostController {
 
     @GetMapping("/{id}")
     public String showDetail(Model model, @PathVariable Long id) {
-        Post post = postService.getPostById(id);
+        Post post = postService.getForPrintPostById(id);
 
         model.addAttribute("post", post);
 

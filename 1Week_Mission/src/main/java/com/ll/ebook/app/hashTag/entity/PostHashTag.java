@@ -19,10 +19,12 @@ import javax.persistence.ManyToOne;
 @ToString(callSuper = true)
 public class PostHashTag extends BaseEntity {
     @ManyToOne
+    @ToString.Exclude
     private Member memberId;
     @ManyToOne
+    @ToString.Exclude
     private Post postId;
     @ManyToOne
+    @ToString.Exclude
     private PostKeyword postKeywordId;
-
 }
