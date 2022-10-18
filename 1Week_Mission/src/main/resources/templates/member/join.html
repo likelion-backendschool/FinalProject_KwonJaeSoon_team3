@@ -1,82 +1,98 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout/layout.html}">
+<html layout:decorate="~{/layout/layout}">
 
 <head>
   <title>회원가입</title>
 </head>
 
 <body>
-<section layout:fragment="content">
-    <div class="container">
-        <h1>회원가입</h1>
+<main layout:fragment="main">
+    <section class="section section-join flex-grow flex flex-col items-center justify-center">
 
-        <script>
-            function JoinForm__submit(form) {
-                form.username.value = form.username.value.trim();
+        <div class="max-w-md w-full px-2 pt-4">
+            <h1 class="font-bold text-lg">회원가입</h1>
 
-                if ( form.username.value.length == 0 ) {
-                    alert("아이디를 입력해주세요.");
-                    form.username.focus();
-                    return;
+            <script>
+                function JoinForm__submit(form) {
+                    form.username.value = form.username.value.trim();
+
+                    if ( form.username.value.length == 0 ) {
+                        alert("아이디를 입력해주세요.");
+                        form.username.focus();
+                        return;
+                    }
+
+                    form.password.value = form.password.value.trim();
+
+                    if ( form.password.value.length == 0 ) {
+                        alert("비밀번호를 입력해주세요.");
+                        form.password.focus();
+                        return;
+                    }
+
+                    form.passwordConfirm.value = form.passwordConfirm.value.trim();
+
+                    if(form.passwordConfirm.value != form.password.value) {
+                        alert("비밀번호가 틀립니다.");
+                        form.passwordConfirm.focus();
+                        return;
+                    }
+
+                    form.email.value = form.email.value.trim();
+
+                    if ( form.email.value.length == 0 ) {
+                        alert("이메일을 입력해주세요.");
+                        form.email.focus();
+                        return;
+                    }
+
+                    form.submit();
                 }
 
-                form.password.value = form.password.value.trim();
-
-                if ( form.password.value.length == 0 ) {
-                    alert("비밀번호를 입력해주세요.");
-                    form.password.focus();
-                    return;
-                }
-
-                form.passwordConfirm.value = form.passwordConfirm.value.trim();
-
-                if(form.passwordConfirm.value != form.password.value) {
-                    alert("비밀번호가 틀립니다.");
-                    form.passwordConfirm.focus();
-                    return;
-                }
-
-                form.email.value = form.email.value.trim();
-
-                if ( form.email.value.length == 0 ) {
-                    alert("이메일을 입력해주세요.");
-                    form.email.focus();
-                    return;
-                }
-
-                form.submit();
-            }
-
-        </script>
+            </script>
 
 
-        <form th:action method="POST" onsubmit="JoinForm__submit(this); return false;">
-            <div>
-                <span>아이디</span>
-                <input type="text" name="username">
-            </div>
-            <div>
-                <span>비밀번호</span>
-                <input type="password" name="password">
-            </div>
-            <div>
-                <span>비밀번호 확인</span>
-                <input type="password" name="passwordConfirm">
-            </div>
-            <div>
-                <span>별명</span>
-                <input type="text" name="nickname">
-            </div>
-            <div>
-                <span>이메일</span>
-                <input type="email" name="email">
-            </div>
-            <div>
-                <span>가입</span>
-                <input type="submit" value="가입">
-            </div>
-        </form>
-    </div>
-</section>
+            <form th:action method="POST" class="flex flex-col gap-3" onsubmit="JoinForm__submit(this); return false;">
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">아이디</span>
+                    </label>
+                    <input autofocus type="text" name="username" placeholder="아이디" class="input input-bordered"
+                           maxlength="50">
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">비밀번호</span>
+                    </label>
+                    <input type="password" name="password"
+                           placeholder="비밀번호" class="input input-bordered" maxlength="50">
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">비밀번호</span>
+                    </label>
+                    <input type="password" name="passwordConfirm"
+                           placeholder="비밀번호 확인" class="input input-bordered" maxlength="50">
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">작가명</span>
+                    </label>
+                    <input type="text" name="nickname" placeholder="작가명" class="input input-bordered" maxlength="50">
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">이메일</span>
+                    </label>
+                    <input type="email" name="email" placeholder="이메일" class="input input-bordered" maxlength="50">
+                </div>
+                <div class="grid grid-cols-2 mt-2 gap-2">
+                    <input class="btn btn-primary" type="submit" value="회원가입">
+                    <a href="/member/join" class="btn btn-secondary btn-outline">가입</a>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
 </body>
 </html>

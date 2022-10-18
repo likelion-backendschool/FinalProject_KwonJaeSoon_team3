@@ -1,39 +1,42 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout/layout.html}">
+<html layout:decorate="~{/layout/layout}">
 
 <head>
     <title>글 상세페이지</title>
 </head>
 
 <body>
-<section layout:fragment="content">
-    <div class="container">
-        <h1>글 상세페이지</h1>
+<main layout:fragment="main">
+    <section class="section section-login flex-grow flex flex-col items-center justify-center">
 
-        <div>
-            번호 : [[${post.id}]]
-        </div>
+        <div class="max-w-md w-full px-2 pt-4">
+            <h1 class="font-bold text-lg">글 상세페이지</h1>
 
-        <div>
-            제목 : [[${post.subject}]]
-        </div>
+            <div>
+                번호 : [[${post.id}]]
+            </div>
 
-        <div>
-            작성자 : [[${post.authorId.username}]]
-        </div>
+            <div>
+                제목 : [[${post.subject}]]
+            </div>
 
-        <div>
-            작성날짜 : [[${post.createDate}]]
-        </div>
+            <div>
+                작성자 : [[${post.authorId.username}]]
+            </div>
 
-        <div>
-            수정날짜 : [[${post.modifyDate}]]
-        </div>
+            <div>
+                작성날짜 : [[${post.createDate}]]
+            </div>
 
-        <div>
-            내용 : [[${post.content}]]
+            <div>
+                수정날짜 : [[${post.modifyDate}]]
+            </div>
+
+            <div>
+                내용 : [[${post.content}]]
+            </div>
         </div>
-    </div>
-</section>
+    </section>
+</main>
 </body>
 </html>
