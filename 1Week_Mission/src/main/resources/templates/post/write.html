@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html layout:decorate="~{/layout/layout}">
+
+<head>
+    <title>회원가입</title>
+</head>
+
+<body>
+<main layout:fragment="main">
+
+    <section class="section section-join flex-grow flex flex-col items-center justify-center">
+
+        <div class="max-w-md w-full px-2 pt-4">
+            <h1 class="font-bold text-lg">글 작성</h1>
+            <script>
+                function WriteForm__submit(form) {
+                    form.subject.value = form.subject.value.trim();
+
+                    if (form.subject.value.length == 0) {
+                        alert("제목을 입력해주세요.");
+                        form.subject.focus();
+                        return;
+                    }
+
+                    form.content.value = form.content.value.trim();
+
+                    if (form.content.value.length == 0) {
+                        alert("내용을 입력해주세요.");
+                        form.content.focus();
+                        return;
+                    }
+
+                    form.submit();
+                }
+
+            </script>
+
+            <form th:action method="POST" class="flex flex-col gap-3" onsubmit="WriteForm__submit(this); return false;">
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">제목</span>
+                    </label>
+                    <input autofocus type="text" name="subject" placeholder="제목" class="input input-bordered"
+                           maxlength="50">
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">내용</span>
+                    </label>
+                    <textarea name="content" placeholder="#내용" class="textarea textarea-bordered min-h-[500px] h-[calc(100vh-400px)]"
+                              maxlength="10000"></textarea>
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">해시태그</span>
+                    </label>
+                    <input autofocus type="text" name="keywords" placeholder="#해시태그1 #해시태그2" class="input input-bordered"
+                           maxlength="50">
+                </div>
+                <div class="grid grid-cols-2 mt-2 gap-2">
+                    <input class="btn btn-primary" type="submit" value="작성">
+                    <button type="button" onclick="history.back();" class="btn btn-secondary btn-outline">취소</button>
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+</body>
+</html>

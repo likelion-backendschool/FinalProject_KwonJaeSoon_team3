@@ -10,5 +10,5 @@ public class PostForm {
     private String subject;
     @NotEmpty
     private String content;
-    private String postKeywordContents;
+    private String keywords;
 }
