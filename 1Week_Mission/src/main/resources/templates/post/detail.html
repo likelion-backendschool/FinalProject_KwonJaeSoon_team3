@@ -7,39 +7,49 @@
 
 <body>
 <main layout:fragment="main">
-    <section class="section section-login flex-grow flex flex-col items-center justify-center">
+    <section class="section section-write container mx-auto">
 
-        <div class="max-w-md w-full px-2 pt-4">
+        <div class="px-2 pt-4">
             <h1 class="font-bold text-lg">글 상세페이지</h1>
 
-            <div>
-                번호 : [[${post.id}]]
-            </div>
+            <div class="flex flex-col gap-3 mt-3">
+                <div>
+                    <div class="badge badge-primary">번호</div>
 
-            <div>
-                제목 : [[${post.subject}]]
-            </div>
+                    <div th:text="${post.id}"></div>
+                </div>
+                <div>
+                    <div class="badge badge-primary">제목</div>
 
-            <div>
-                작성자 : [[${post.authorId.username}]]
-            </div>
+                    <div th:text="${post.subject}"></div>
+                </div>
+                <div>
+                    <div class="badge badge-primary">작성자</div>
 
-            <div>
-                작성날짜 : [[${post.createDate}]]
-            </div>
+                    <div th:text="${post.authorId.username}"></div>
+                </div>
+                <div>
+                    <div class="badge badge-primary">작성날짜</div>
 
-            <div>
-                수정날짜 : [[${post.modifyDate}]]
-            </div>
+                    <div th:text="${post.createDate}"></div>
+                </div>
+                <div>
+                    <div class="badge badge-primary">수정날짜</div>
 
-            <div>
-                내용 : [[${post.content}]]
-            </div>
+                    <div th:text="${post.modifyDate}"></div>
+                </div>
+                <div>
+                    <div class="badge badge-primary">내용</div>
 
-            <div>
-                해시태그 :
-                <th:block th:utext="${post.extra_hashTagLinks}"/>
+                    <div th:text="${post.content}"></div>
+                </div>
+                <div>
+                    <div class="badge badge-primary">해시태그</div>
+
+                    <th:block th:utext="${post.extra_hashTagLinks}"/>
+                </div>
             </div>
+            <a th:href="@{|/post/${post.id}/modify|}" class="btn btn-sm btn-secondary">수정</a>
         </div>
     </section>
 </main>

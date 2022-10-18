@@ -41,8 +41,7 @@
                     <label class="label">
                         <span class="label-text">아이디</span>
                     </label>
-                    <span class="input input-bordered">
-                        [[${#authentication.principal.username}]]
+                    <span class="input input-bordered" th:text="${#authentication.principal.username}">
                     </span>
                 </div>
                 <div class="form-control">
@@ -59,7 +58,6 @@
                 </div>
                 <div class="grid grid-cols-2 mt-2 gap-2">
                     <input class="btn btn-primary" type="submit" value="수정">
-                    <a href="/member/modify" class="btn btn-secondary btn-outline">수정</a>
                 </div>
             </form>
         </div>
