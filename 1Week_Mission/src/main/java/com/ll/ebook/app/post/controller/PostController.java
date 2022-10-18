@@ -53,7 +53,7 @@ public class PostController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/write")
     public String write(@AuthenticationPrincipal MemberContext context, @Valid PostForm postForm) {
-        Post post = postService.write(context.getId(), postForm.getSubject(), postForm.getContent(), "", postForm.getKeywords());
+        Post post = postService.write(context.getId(), postForm.getSubject(), postForm.getContent(), postForm.getContentHtml(), postForm.getKeywords());
 
         String msg = "%d번 게시물이 작성되었습니다.".formatted(post.getId());
         msg = Util.url.encode(msg);
@@ -66,7 +66,8 @@ public class PostController {
         Post post =  postService.getForPrintPostById(id);
 
         if (context.memberIsNot(post.getAuthorId())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+            String msg = Util.url.encode("%d번 게시물을 수정할 수 없습니다.".formatted(id));
+            return "redirect:/post/%d?msg=%s".formatted(id, msg);
         }
 
         model.addAttribute("post", post);
@@ -82,16 +83,21 @@ public class PostController {
         if (context.memberIsNot(post.getAuthorId())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
-        postService.modify(post, postForm.getSubject(), postForm.getContent(), postForm.getKeywords());
+        postService.modify(post, postForm.getSubject(), postForm.getContent(), postForm.getContentHtml(), postForm.getKeywords());
 
         String msg = Util.url.encode("%d번 게시물이 수정되었습니다.".formatted(id));
         return "redirect:/post/%d?msg=%s".formatted(id, msg);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}/delete")
-    public String delete(@PathVariable Long id) {
+    public String delete(@AuthenticationPrincipal MemberContext context, @PathVariable Long id) {
         Post post = postService.getForPrintPostById(id);
 
+        if(context.memberIsNot(post.getAuthorId())) {
+            String msg = Util.url.encode("%d번 게시물을 삭제할 수 없습니다.".formatted(id));
+            return "redirect:/post/%d?msg=%s".formatted(id, msg);
+        }
         postService.delete(post);
 
         String msg = Util.url.encode("%d번 게시물이 삭제되었습니다.".formatted(id));

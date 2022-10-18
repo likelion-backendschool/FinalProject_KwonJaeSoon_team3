@@ -6,9 +6,11 @@ import com.ll.ebook.app.hashTag.entity.PostHashTag;
 import com.ll.ebook.app.member.entity.Member;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import java.util.List;
@@ -27,7 +29,9 @@ public class Post extends BaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member authorId;
     private String subject;
+    @Column(columnDefinition = "TEXT")
     private String content;
+    @Column(columnDefinition = "TEXT")
     private String contentHtml;
 
     public String getExtra_inputValue_hashTagContents() {
