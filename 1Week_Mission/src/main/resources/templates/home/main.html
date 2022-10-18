@@ -1,21 +1,33 @@
-<div>
-    <h1>메인화면</h1>
-        <li th:each="post : ${posts}">
-            <a th:href="@{|/post/${post.id}|}" th:text="|번호 : ${post.id}|">
-            </a>
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}">
 
-            <a th:href="@{|/post/${post.id}|}" th:text="|제목 : ${post.subject}|">
-            </a>
+<head>
+    <title>메인</title>
+</head>
 
-            <a th:href="@{|/post/${post.id}|}" th:text="|작성자 : ${post.authorId.username}|">
-            </a>
+<body>
+<section layout:fragment="content">
+    <div>
+        <h1>메인화면</h1>
+            <li th:each="post : ${posts}">
+                <a th:href="@{|/post/${post.id}|}" th:text="|번호 : ${post.id}|">
+                </a>
 
-            <a th:href="@{|/post/${post.id}|}" th:text="|작성 : ${post.createDate}|">
-            </a>
+                <a th:href="@{|/post/${post.id}|}" th:text="|제목 : ${post.subject}|">
+                </a>
 
-            <a th:href="@{|/post/${post.id}|}" th:text="|수정 : ${post.modifyDate}|">
-            </a>
+                <a th:href="@{|/post/${post.id}|}" th:text="|작성자 : ${post.authorId.username}|">
+                </a>
 
-        </li>
-    </ul>
-</div>
+                <a th:href="@{|/post/${post.id}|}" th:text="|작성 : ${post.createDate}|">
+                </a>
+
+                <a th:href="@{|/post/${post.id}|}" th:text="|수정 : ${post.modifyDate}|">
+                </a>
+
+            </li>
+        </ul>
+    </div>
+</section>
+</body>
+</html>

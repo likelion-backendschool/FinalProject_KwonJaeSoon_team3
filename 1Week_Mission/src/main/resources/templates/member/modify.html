@@ -1,44 +1,59 @@
-<h1>회원정보수정</h1>
+<!DOCTYPE html>
+<html layout:decorate="~{layout/layout.html}">
 
-<script>
-  function ModifyForm__submit(form) {
-    form.nickname.value = form.nickname.value.trim();
+<head>
+  <title>회원정보수정</title>
+</head>
 
-    if (form.username.value.length == 0) {
-      alert("작가명을 입력해주세요.");
-      form.nickname.focus();
-      return;
-    }
+<body>
+<section layout:fragment="content">
+    <div class="container">
 
-    form.email.value = form.email.value.trim();
+        <h1>회원정보수정</h1>
 
-    if (form.password.value.length == 0) {
-      alert("이메일을 입력해주세요.");
-      form.email.focus();
-      return;
-    }
+        <script>
+            function ModifyForm__submit(form) {
+                form.nickname.value = form.nickname.value.trim();
 
-    form.submit();
-  }
+                if (form.username.value.length == 0) {
+                    alert("작가명을 입력해주세요.");
+                    form.nickname.focus();
+                    return;
+                }
 
-</script>
+                form.email.value = form.email.value.trim();
+
+                if (form.password.value.length == 0) {
+                    alert("이메일을 입력해주세요.");
+                    form.email.focus();
+                    return;
+                }
+
+                form.submit();
+            }
+
+        </script>
 
 
-<form th:action method="POST" onSubmit="ModifyForm__submit(this); return false;">
-  <div>
-    <span>아이디</span>
-    <span th:text="${#authentication.principal.username}"></span>
-  </div>
-  <div>
-    <span>작가명</span>
-    <input type="text" name="nickname" th:value="${#authentication.principal.nickname}">
-  </div>
-  <div>
-    <span>이메일</span>
-    <input type="text" name="email" th:value="${#authentication.principal.email}">
-  </div>
-  <div>
-    <span>수정</span>
-    <input type="submit" value="수정">
-  </div>
-</form>
+        <form th:action method="POST" onSubmit="ModifyForm__submit(this); return false;">
+            <div>
+                <span>아이디</span>
+                <span th:text="${#authentication.principal.username}"></span>
+            </div>
+            <div>
+                <span>작가명</span>
+                <input type="text" name="nickname" th:value="${#authentication.principal.nickname}">
+            </div>
+            <div>
+                <span>이메일</span>
+                <input type="text" name="email" th:value="${#authentication.principal.email}">
+            </div>
+            <div>
+                <span>수정</span>
+                <input type="submit" value="수정">
+            </div>
+        </form>
+    </div>
+</section>
+</body>
+</html>
