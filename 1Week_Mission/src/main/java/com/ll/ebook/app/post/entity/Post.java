@@ -6,6 +6,8 @@ import com.ll.ebook.app.hashTag.entity.PostHashTag;
 import com.ll.ebook.app.member.entity.Member;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -22,6 +24,7 @@ import java.util.stream.Collectors;
 @ToString(callSuper = true)
 public class Post extends BaseEntity {
     @ManyToOne
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member authorId;
     private String subject;
     private String content;

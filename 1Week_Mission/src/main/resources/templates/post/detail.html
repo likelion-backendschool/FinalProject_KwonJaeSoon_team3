@@ -49,7 +49,11 @@
                     <th:block th:utext="${post.extra_hashTagLinks}"/>
                 </div>
             </div>
-            <a th:href="@{|/post/${post.id}/modify|}" class="btn btn-sm btn-secondary">수정</a>
+            <div class="py-3">
+                <a th:href="@{|/post/list|}" class="btn btn-sm btn-secondary">목록</a>
+                <a th:href="@{|/post/${post.id}/modify|}" class="btn btn-sm btn-secondary">수정</a>
+                <a onclick="return confirm('정말로 삭제하시겠습니까?')" th:href="@{|/post/${post.id}/delete|}" class="btn btn-sm btn-secondary">삭제</a>
+            </div>
         </div>
     </section>
 </main>

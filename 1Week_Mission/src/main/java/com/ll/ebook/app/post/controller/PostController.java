@@ -88,5 +88,14 @@ public class PostController {
         return "redirect:/post/%d?msg=%s".formatted(id, msg);
     }
 
+    @GetMapping("/{id}/delete")
+    public String delete(@PathVariable Long id) {
+        Post post = postService.getForPrintPostById(id);
+
+        postService.delete(post);
+
+        String msg = Util.url.encode("%d번 게시물이 삭제되었습니다.".formatted(id));
+        return "redirect:/post/list?msg=%s".formatted(msg);
+    }
 
 }

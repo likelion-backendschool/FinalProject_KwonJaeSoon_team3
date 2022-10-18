@@ -74,4 +74,12 @@ public class PostService {
 
         hashTagService.applyHashTags(post, keywords);
     }
+
+    public Post findById(Long id) {
+        return postRepository.findById(id).get();
+    }
+
+    public void delete(Post post) {
+        postRepository.delete(post);
+    }
 }
