@@ -1,5 +1,7 @@
 <div>
-    <h1>메인화면</h1>
+    <h1>글 리스트</h1>
+
+    <ul>
         <li th:each="post : ${posts}">
             <a th:href="@{|/post/${post.id}|}" th:text="|번호 : ${post.id}|">
             </a>
