@@ -33,6 +33,10 @@
                     <a th:href="@{|/post/${post.id}|}">
                         <span th:text="|수정 : ${post.modifyDate}|"></span>
                     </a>
+
+                    <a th:href="@{|/post/${post.id}|}">
+                        <span th:utext="|해시태그 : ${post.extra_hashTagLinks}|"></span>
+                    </a>
                 </li>
             </ul>
         </div>

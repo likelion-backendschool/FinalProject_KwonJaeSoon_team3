@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html lang="kr" xmlns:th="http://www.thymeleaf.org">
+<html
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        xmlns:th="http://www.thymeleaf.org"
+        lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -33,14 +37,11 @@
 
 <body class="min-h-screen flex flex-col pt-[35px]">
 
-
-
 <!-- 데이지 UI -->
 <link href="https://cdn.jsdelivr.net/npm/daisyui@2.31.0/dist/full.css" rel="stylesheet" type="text/css"/>
 
 <!-- common.css -->
 <link href="/resource/common/common.css" rel="stylesheet" type="text/css"/>
-
 
 <!-- 토스트 UI 에디터 의존성 시작 -->
 <!-- 토스트 UI 에디터 코어 -->
@@ -460,7 +461,6 @@
     // 토스트 에디터 끝
 </script>
 
-
 <header class="fixed z-40 top-0 left-0 w-full bg-white border-b-[1px] border-b-[color:#efefef] h-[35px]">
     <div class="container mx-auto h-full flex items-center px-2">
         <a href="/" class="logo flex font-bold mr-auto">
@@ -487,7 +487,7 @@
                     로그아웃
                 </span>
             </a>
-            <form name="logoutForm" th:action="@{/member/logout}" method="post" hidden></form>
+            <form name="logoutForm" th:action="@{/member/login}" method="post" hidden></form>
             <a href="/member/profile" class="inline-flex" sec:authorize="isAuthenticated()">
                 <i class="fa-solid fa-user"></i>
                 <span class="ml-[2px] hidden sm:block">
