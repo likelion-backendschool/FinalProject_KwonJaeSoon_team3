@@ -48,13 +48,18 @@ public class MemberController {
             nickname = null;
         }
 
-        memberService.join(joinForm.getUsername(), joinForm.getPassword(), nickname, joinForm.getEmail());
+        Member member = memberService.join(joinForm.getUsername(), joinForm.getPassword(), nickname, joinForm.getEmail());
 
         try {
             req.login(joinForm.getUsername(), joinForm.getPassword());
         } catch (ServletException e) {
             throw new RuntimeException(e);
         }
+
+        String title = "%s님의 회원가입 축하메시지".formatted(joinForm.getUsername());
+        String msg = "$s님의 회원가입을 축하합니다!!!!!".formatted(joinForm.getUsername());
+
+        contactService.sendSimpleMessage(member, title, msg);
 
         return "redirect:/member/profile";
     }
