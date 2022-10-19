@@ -5,6 +5,7 @@ import com.ll.ebook.app.member.entity.Member;
 import com.ll.ebook.app.member.form.JoinForm;
 import com.ll.ebook.app.member.service.MemberService;
 import com.ll.ebook.app.security.dto.MemberContext;
+import com.ll.ebook.util.Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -39,7 +40,8 @@ public class MemberController {
         Member oldMember = memberService.findMemberByUsername(joinForm.getUsername());
 
         if(oldMember != null) {
-            return "redirect:/?errorMsg=Already Join";
+            String msg = Util.url.encode("이미 존재하는 회원입니다..");
+            return "redirect:/member/join?msg=%s".formatted(msg);
         }
 
         String nickname = joinForm.getNickname();
@@ -57,9 +59,9 @@ public class MemberController {
         }
 
         String title = "%s님의 회원가입 축하메시지".formatted(joinForm.getUsername());
-        String msg = "$s님의 회원가입을 축하합니다!!!!!".formatted(joinForm.getUsername());
+        String joinMsg= "$s님의 회원가입을 축하합니다!!!!!".formatted(joinForm.getUsername());
 
-        contactService.sendSimpleMessage(member, title, msg);
+        contactService.sendSimpleMessage(member, title, joinMsg);
 
         return "redirect:/member/profile";
     }
@@ -115,7 +117,8 @@ public class MemberController {
         Member loginedMember = memberService.findMemberByUsername(context.getUsername());
 
         if(!passwordEncoder.matches(password, loginedMember.getPassword())) {
-            return "member/modifyPassword";
+            String msg = Util.url.encode("현재 비밀번호가 틀립니다.");
+            return "redirect:/member/modifyPassword?msg=%s".formatted(msg);
         }
 
         memberService.modifyPassword(loginedMember, modifyPassword);
@@ -145,11 +148,12 @@ public class MemberController {
     }
 
     @PostMapping("/findPassword")
-    public String findPassword(Model model, String username, String email) {
+    public String findPassword(String username, String email) {
         Member member = memberService.findMemberByUsernameAndEmail(username, email);
 
         if(member == null) {
-            return "member/findPassword";
+            String msg = Util.url.encode("가입된 아이디가 없습니다.");
+            return "redirect:/member/findPassword?msg=%s".formatted(msg);
         }
 
         String newPassword = "";

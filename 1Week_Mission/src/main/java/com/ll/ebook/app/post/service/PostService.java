@@ -7,7 +7,6 @@ import com.ll.ebook.app.post.entity.Post;
 import com.ll.ebook.app.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -82,5 +81,9 @@ public class PostService {
 
     public void delete(Post post) {
         postRepository.delete(post);
+    }
+
+    public List<Post> getPostsBymemberIdAndKeyword(Long memberId, String keyword) {
+        return postRepository.getPostsBymemberIdAndKeyword(memberId, keyword);
     }
 }

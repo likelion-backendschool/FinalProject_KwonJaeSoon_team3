@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ll.ebook.app.base.entity.BaseEntity;
 import com.ll.ebook.app.hashTag.entity.PostHashTag;
 import com.ll.ebook.app.member.entity.Member;
+import com.ll.ebook.app.security.dto.MemberContext;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -73,10 +75,10 @@ public class Post extends BaseEntity {
                     String text = "#" + hashTag.getPostKeywordId().getContent();
 
                     return """
-                            <a href="%s" target="_blank">%s</a>
+                            <a href="%s&memberId=%d">%s</a>
                             """
                             .stripIndent()
-                            .formatted(hashTag.getPostKeywordId().getListUrl(), text);
+                            .formatted(hashTag.getPostKeywordId().getListUrl(), hashTag.getMemberId().getId(), hashTag.getPostKeywordId().getContent(), text);
                 })
                 .sorted()
                 .collect(Collectors.joining(" "));

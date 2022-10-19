@@ -26,9 +26,25 @@ import java.util.Map;
 public class PostController {
     private final PostService postService;
 
+//    @GetMapping("/list")
+//    public String showList(Model model) {
+//        List<Post> posts = postService.getPosts();
+//
+//        model.addAttribute("posts", posts);
+//
+//        return "post/list";
+//    }
+
     @GetMapping("/list")
-    public String showList(Model model) {
-        List<Post> posts = postService.getPosts();
+    public String showList(@RequestParam(value = "memberId", defaultValue = "0") Long memberId, @RequestParam(value = "kw", defaultValue = "") String keyword, Model model) {
+        if (memberId == 0 || keyword.equals("")) {
+            List<Post> posts = postService.getPosts();
+            model.addAttribute("posts", posts);
+
+            return "post/list";
+        }
+
+        List<Post> posts = postService.getPostsBymemberIdAndKeyword(memberId, keyword);
 
         model.addAttribute("posts", posts);
 
