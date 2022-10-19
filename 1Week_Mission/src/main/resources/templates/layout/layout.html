@@ -487,7 +487,7 @@
                     로그아웃
                 </span>
             </a>
-            <form name="logoutForm" th:action="@{/member/login}" method="post" hidden></form>
+            <form name="logoutForm" th:action="@{/member/logout}" method="post" hidden></form>
             <a href="/member/profile" class="inline-flex" sec:authorize="isAuthenticated()">
                 <i class="fa-solid fa-user"></i>
                 <span class="ml-[2px] hidden sm:block">
