@@ -7,6 +7,7 @@ import com.ll.ebook.app.member.service.MemberService;
 import com.ll.ebook.app.security.dto.MemberContext;
 import com.ll.ebook.util.Util;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -164,11 +165,7 @@ public class MemberController {
             return "redirect:/member/findPassword?msg=%s".formatted(msg);
         }
 
-        String newPassword = "";
-        for(int i = 0; i < 10; i++) {
-            char ran = (char)((int)(Math.random() * 25) + 97);
-            newPassword += ran;
-        }
+        String newPassword = RandomStringUtils.randomAlphanumeric(10);;
 
         memberService.setNewPassword(member, newPassword);
 
