@@ -4,6 +4,7 @@ import com.ll.ebook.app.member.entity.Member;
 import lombok.AllArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 public class ContactService {
     private JavaMailSender emailSender;
 
+    @Async
     public void sendSimpleMessage(Member member, String title, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("a2346532@gmail.com");
@@ -20,6 +22,7 @@ public class ContactService {
         emailSender.send(message);
     }
 
+    @Async
     public void sendSimpleMessage(Member member, String text) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("a2346532@gmail.com");
