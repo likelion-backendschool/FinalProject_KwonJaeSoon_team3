@@ -20,6 +20,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -121,16 +122,14 @@ public class MemberController {
         Member loginedMember = memberService.findMemberByUsername(context.getUsername());
 
         if(!passwordEncoder.matches(password, loginedMember.getPassword())) {
-            String msg = Util.url.encode("현재 비밀번호가 틀립니다.");
-            return "redirect:/member/modifyPassword?msg=%s".formatted(msg);
+                String msg = Util.url.encode("현재 비밀번호가 틀립니다.");
+                return "redirect:/member/modifyPassword?msg=%s".formatted(msg);
         }
 
         memberService.modifyPassword(loginedMember, modifyPassword);
 
         return "redirect:/member/profile";
     }
-
-
 
     @GetMapping("/findUsername")
     public String showFindUsername() {
@@ -139,7 +138,12 @@ public class MemberController {
 
     @PostMapping("/findUsername")
     public String findUsername(Model model, String email) {
-        Member member = memberService.findMemberByEmail(email);
+        Optional<Member> member = memberService.findMemberByEmail(email);
+
+        if (!member.isPresent()) {
+            String msg = Util.url.encode("등록된 아이디가 존재하지 않습니다.");
+            return "redirect:/member/findUsername?msg=%s".formatted(msg);
+        }
 
         model.addAttribute("member", member);
 
