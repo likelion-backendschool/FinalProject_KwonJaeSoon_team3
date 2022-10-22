@@ -43,6 +43,14 @@ public class MemberService {
         member.setNickname(nickname);
         member.setEmail(email);
 
+        int authLevel = 3;
+
+        if( nickname != null) {
+            authLevel = 7;
+        }
+
+        member.setAuthLevel(authLevel);
+
         memberRepository.save(member);
     }
 

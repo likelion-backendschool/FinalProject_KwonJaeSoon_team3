@@ -98,6 +98,10 @@ public class MemberController {
     public String modify(@AuthenticationPrincipal MemberContext context, String nickname, String email) {
         Member member = memberService.findMemberByUsername(context.getUsername());
 
+        if(nickname.equals("")) {
+            nickname = null;
+        }
+
         memberService.modify(member, nickname, email);
 
         return "redirect:/member/profile";
