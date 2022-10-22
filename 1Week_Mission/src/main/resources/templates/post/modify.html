@@ -22,21 +22,6 @@
                         return;
                     }
 
-                    const editor = $(form).find(".toast-ui-editor").data("data-toast-editor");
-                    console.log(editor);
-                    form.content.value = editor;
-
-                    const editor2 = $(form).find(".toast-ui-editor").data("data-toast-editor");
-
-                    const markdown = editor2.getMarkdown();
-                    console.log(markdown);
-                    form.contentHtml.value = markdown.trim();
-                    if (form.contentHtml.value.length == 0) {
-                        alert("내용을 입력해주세요");
-                        editor.focus();
-                        return;
-                    }
-
                     form.submit();
                 }
 
@@ -56,7 +41,8 @@
                     <label class="label">
                         <span class="label-text">내용</span>
                     </label>
-                    <div class="toast-ui-editor" toast-ui-editor--height="calc(100vh - 300px)"></div>
+                    <input autofocus type="text" name="content" placeholder="제목" class="input input-bordered"
+                           maxlength="50" th:value="${post.content}">
                 </div>
                 <div class="form-control">
                     <label class="label">

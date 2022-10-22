@@ -41,11 +41,7 @@
                 <div>
                     <div class="badge badge-primary">내용</div>
 
-                    <div class="toast-ui-viewer">
-                        <script type="text/x-template">
-                            [[${post.contentHtml}]]
-                        </script>
-                    </div>
+                    <div th:utext="${@markDown.markdown(post.content)}"></div>
                 </div>
                 <div>
                     <div class="badge badge-primary">해시태그</div>
