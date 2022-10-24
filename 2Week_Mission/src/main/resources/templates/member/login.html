@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html layout:decorate="~{/layout/layout}">
+
+<head>
+  <title>로그인</title>
+</head>
+
+
+<body>
+<main layout:fragment="main">
+    <section class="section section-login flex-grow flex flex-col items-center justify-center">
+
+        <div class="max-w-md w-full px-2 pt-4">
+            <h1 class="font-bold text-lg">로그인</h1>
+            <script>
+                function LoginForm__submit(form) {
+                    form.username.value = form.username.value.trim();
+
+                    if ( form.username.value.length == 0 ) {
+                        alert("아이디를 입력해주세요.");
+                        form.username.focus();
+                        return;
+                    }
+
+                    form.password.value = form.password.value.trim();
+
+                    if ( form.password.value.length == 0 ) {
+                        alert("비밀번호를 입력해주세요.");
+                        form.password.focus();
+                        return;
+                    }
+
+                    form.submit();
+                }
+
+            </script>
+
+
+            <form th:action method="POST" onsubmit="LoginForm__submit(this); return false;">
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">아이디</span>
+                    </label>
+                    <input autofocus type="text" name="username" placeholder="아이디" class="input input-bordered" maxlength="50">
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">비밀번호</span>
+                    </label>
+                    <input type="password" name="password"
+                           placeholder="비밀번호" class="input input-bordered" maxlength="50">
+                </div>
+                <div class="grid grid-cols-2 mt-2 gap-2">
+                    <input class="btn btn-primary" type="submit" value="로그인">
+                    <a href="/member/login" class="btn btn-secondary btn-outline">로그인</a>
+                </div>
+            </form>
+            <a href="/member/findUsername">아이디 찾기</a>
+            <a href="/member/findPassword">비밀번호 찾기</a>
+        </div>
+    </section>
+</main>
+</body>
+</html>
