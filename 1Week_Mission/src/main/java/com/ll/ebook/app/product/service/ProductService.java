@@ -94,4 +94,38 @@ public class ProductService {
     public boolean actorCanRemove(Member author, Post post) {
         return actorCanModify(author, post);
     }
+
+    public List<Product> findAllForPrintByOrderByIdDesc(Member actor) {
+        List<Product> products = findAllByOrderByIdDesc();
+
+        loadForPrintData(products, actor);
+
+        return products;
+    }
+
+    private void loadForPrintData(List<Product> products, Member actor) {
+        long[] ids = products
+                .stream()
+                .mapToLong(Product::getId)
+                .toArray();
+
+        List<ProductHashTag> productTagsByProductIds = productHashTagService.getProductTagsByProductIdIn(ids);
+
+        Map<Long, List<ProductHashTag>> productTagsByProductIdMap = productTagsByProductIds.stream()
+                .collect(groupingBy(
+                        productTag -> productTag.getProduct().getId(), toList()
+                ));
+
+        products.stream().forEach(product -> {
+            List<ProductHashTag> productTags = productTagsByProductIdMap.get(product.getId());
+
+            if (productTags == null || productTags.size() == 0) return;
+
+            product.getExtra().put("productTags", productTags);
+        });
+    }
+
+    private List<Product> findAllByOrderByIdDesc() {
+        return productRepository.findAllByOrderByIdDesc();
+    }
 }

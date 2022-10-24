@@ -29,6 +29,8 @@ public class ProductController {
     private final PostKeywordService postKeywordService;
     private final ProductService productService;
 
+    private final Rq rq;
+
     @PreAuthorize("isAuthenticated() and hasAuthority('writer')")
     @GetMapping("/create")
     public String showCreate(@AuthenticationPrincipal MemberContext memberContext, Model model) {
@@ -54,6 +56,15 @@ public class ProductController {
         model.addAttribute("posts", posts);
 
         return "product/detail";
+    }
+
+    @GetMapping("/list")
+    public String list(Model model) {
+        List<Product> products = productService.findAllForPrintByOrderByIdDesc(rq.getMember());
+
+        model.addAttribute("products", products);
+
+        return "product/list";
     }
 
 }
