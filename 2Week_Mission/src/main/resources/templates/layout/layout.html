@@ -33,6 +33,12 @@
 
     <!-- 테일윈드 -->
     <script src="https://cdn.tailwindcss.com"></script>
+
+    <script type="text/javascript">
+        function addItemForm__Submit() {
+            document.getElementById('addItemForm').submit();
+        }
+    </script>
 </head>
 
 <body class="min-h-screen flex flex-col pt-[35px]">
@@ -66,7 +72,7 @@
             <a href="javascript: document.logoutForm.submit();" class="inline-flex" sec:authorize="isAuthenticated()">
                 <i class="fa-solid fa-arrow-right-from-bracket"></i>
                 <span class="ml-[2px] hidden sm:block">
-                    로그아웃
+                로그아웃
                 </span>
             </a>
             <form name="logoutForm" th:action="@{/member/logout}" method="post" hidden></form>

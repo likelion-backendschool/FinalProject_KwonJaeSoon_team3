@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.w3.org/1999/html">
 
 <body>
+
 <th:block th:fragment="productListItem">
     <div class="card bg-base-100 shadow-xl">
         <a th:href="@{|/product/${product.id}|}" class="block">
@@ -37,10 +38,11 @@
                 </div>
             </div>
             <div class="card-actions justify-end">
-                <a th:href class="btn btn-sm">
+                <a onclick="addItemForm__Submit();" class="btn btn-sm" sec:authorize="isAuthenticated()">
                     <i class="fa-solid fa-cart-plus"></i>
                     <span class="ml-2">장바구니</span>
                 </a>
+                <form id="addItemForm" th:action="@{|/cart/add/${product.id}|}" method="post" hidden></form>
 
                 <a th:href="@{|/product/${product.id}|}" class="btn btn-sm">
                     <i class="fa-solid fa-eye"></i>
@@ -51,5 +53,7 @@
     </div>
 </th:block>
 </body>
+
+
 
 </html>
