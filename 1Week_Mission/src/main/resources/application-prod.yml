@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:mysql://${prodDbIp}:3306/eBook_prod?useSSL=false&useUnicode=true&serverTimezone=Asia/Seoul
+    username: ${prodDbId}
+    password: ${prodDbPw}
+  jpa:
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: false
+        use_sql_comments: false
+    hibernate:
+      ddl-auto: none
+logging:
+  level:
+    root: info
+    com.ll.exam.final__2022_10_08.app: info
+    org.hibernate.type.descriptor.sql: info
+custom:
+  site:
+    baseUrl: "https://domain"
