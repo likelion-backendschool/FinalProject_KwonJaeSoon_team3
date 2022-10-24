@@ -1,9 +1,9 @@
 package com.ll.ebook.app.hashTag.service;
 
 import com.ll.ebook.app.hashTag.entity.PostHashTag;
-import com.ll.ebook.app.hashTag.repository.HashTagRepository;
+import com.ll.ebook.app.hashTag.repository.PostHashTagRepository;
 import com.ll.ebook.app.keyword.entity.PostKeyword;
-import com.ll.ebook.app.keyword.service.KeywordService;
+import com.ll.ebook.app.keyword.service.PostKeywordService;
 import com.ll.ebook.app.post.entity.Post;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,9 +16,9 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class HashTagService {
-    private final KeywordService keywordService;
-    private final HashTagRepository hashTagRepository;
+public class PostHashTagService {
+    private final PostKeywordService keywordService;
+    private final PostHashTagRepository postHashTagRepository;
 
 
     public void applyHashTags(Post post, String hashTagContents) {
@@ -32,7 +32,7 @@ public class HashTagService {
         List<PostHashTag> needToDelete = new ArrayList<>();
 
         for (PostHashTag oldHashTag : oldHashTags) {
-            boolean contains = keywordContents.stream().anyMatch(s -> s.equals(oldHashTag.getPostKeywordId().getContent()));
+            boolean contains = keywordContents.stream().anyMatch(s -> s.equals(oldHashTag.getPostKeyword().getContent()));
 
             if (contains == false) {
                 needToDelete.add(oldHashTag);
@@ -40,7 +40,7 @@ public class HashTagService {
         }
 
         needToDelete.forEach(hashTag -> {
-            hashTagRepository.delete(hashTag);
+            postHashTagRepository.delete(hashTag);
         });
 
         keywordContents.forEach(keywordContent -> {
@@ -51,24 +51,28 @@ public class HashTagService {
     private PostHashTag saveHashTag(Post post, String keywordContent) {
         PostKeyword keyword = keywordService.save(keywordContent);
 
-        Optional<PostHashTag> opHashTag = hashTagRepository.findByPostIdIdAndPostKeywordIdId(post.getId(), keyword.getId());
+        Optional<PostHashTag> opHashTag = postHashTagRepository.findByPostIdAndPostKeywordId(post.getId(), keyword.getId());
 
         if (opHashTag.isPresent()) {
             return opHashTag.get();
         }
 
         PostHashTag hashTag = PostHashTag.builder()
-                .memberId(post.getAuthorId())
-                .postId(post)
-                .postKeywordId(keyword)
+                .member(post.getMember())
+                .post(post)
+                .postKeyword(keyword)
                 .build();
 
-        hashTagRepository.save(hashTag);
+        postHashTagRepository.save(hashTag);
 
         return hashTag;
     }
 
     public List<PostHashTag> getHashTags(Post post) {
-        return hashTagRepository.findAllByPostIdId(post.getId());
+        return postHashTagRepository.findAllByPostId(post.getId());
+    }
+
+    public List<PostHashTag> getPostTags(Long memberId, Long postKeywordId) {
+        return postHashTagRepository.findAllByMemberIdAndPostKeywordIdOrderByPost_idDesc(memberId, postKeywordId);
     }
 }

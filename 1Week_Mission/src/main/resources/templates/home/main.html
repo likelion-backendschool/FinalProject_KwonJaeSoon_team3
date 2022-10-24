@@ -19,7 +19,7 @@
                     <a th:href="@{|/post/${post.id}|}" th:text="|제목 : ${post.subject}|">
                     </a>
 
-                    <a th:href="@{|/post/${post.id}|}" th:text="|작성자 : ${post.authorId.username}|">
+                    <a th:href="@{|/post/${post.id}|}" th:text="|작성자 : ${post.member.username}|">
                     </a>
 
                     <a th:href="@{|/post/${post.id}|}" th:text="|작성 : ${post.createDate}|">

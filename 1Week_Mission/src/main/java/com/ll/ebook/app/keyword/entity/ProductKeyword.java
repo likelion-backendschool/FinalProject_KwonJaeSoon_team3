@@ -13,11 +13,12 @@ import javax.persistence.Entity;
 @NoArgsConstructor
 @SuperBuilder
 @ToString(callSuper = true)
-public class PostKeyword extends BaseEntity {
+public class ProductKeyword extends BaseEntity {
+
     private String content;
 
-    public String getListUrl() {
-        return "/post/list?kwType=keyword&kw=%s".formatted(content);
+    public Object getListUrl() {
+        return "/product/tag/" + content;
     }
 
     public long getExtra_postTagsCount() {

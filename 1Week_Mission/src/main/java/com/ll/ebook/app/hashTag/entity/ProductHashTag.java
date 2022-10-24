@@ -1,9 +1,9 @@
 package com.ll.ebook.app.hashTag.entity;
 
 import com.ll.ebook.app.base.entity.BaseEntity;
-import com.ll.ebook.app.keyword.entity.PostKeyword;
+import com.ll.ebook.app.keyword.entity.ProductKeyword;
 import com.ll.ebook.app.member.entity.Member;
-import com.ll.ebook.app.post.entity.Post;
+import com.ll.ebook.app.product.entity.Product;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.OnDelete;
@@ -19,16 +19,18 @@ import javax.persistence.ManyToOne;
 @NoArgsConstructor
 @SuperBuilder
 @ToString(callSuper = true)
-public class PostHashTag extends BaseEntity {
+public class ProductHashTag extends BaseEntity {
+    @ManyToOne
+    @ToString.Exclude
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Product product;
+
     @ManyToOne
     @ToString.Exclude
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
+
     @ManyToOne
     @ToString.Exclude
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private Post post;
-    @ManyToOne
-    @ToString.Exclude
-    private PostKeyword postKeyword;
+    private ProductKeyword productKeyword;
 }

@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 public class Post extends BaseEntity {
     @ManyToOne
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private Member authorId;
+    private Member member;
     private String subject;
     @Column(columnDefinition = "TEXT")
     private String content;
@@ -51,7 +51,7 @@ public class Post extends BaseEntity {
 
         return hashTags
                 .stream()
-                .map(hashTag -> "#" + hashTag.getPostKeywordId().getContent())
+                .map(hashTag -> "#" + hashTag.getPostKeyword().getContent())
                 .sorted()
                 .collect(Collectors.joining(" "));
     }
@@ -72,13 +72,13 @@ public class Post extends BaseEntity {
         return hashTags
                 .stream()
                 .map(hashTag -> {
-                    String text = "#" + hashTag.getPostKeywordId().getContent();
+                    String text = "#" + hashTag.getPostKeyword().getContent();
 
                     return """
                             <a href="%s&memberId=%d">%s</a>
                             """
                             .stripIndent()
-                            .formatted(hashTag.getPostKeywordId().getListUrl(), hashTag.getMemberId().getId(), hashTag.getPostKeywordId().getContent(), text);
+                            .formatted(hashTag.getPostKeyword().getListUrl(), hashTag.getMember().getId(), hashTag.getPostKeyword().getContent(), text);
                 })
                 .sorted()
                 .collect(Collectors.joining(" "));

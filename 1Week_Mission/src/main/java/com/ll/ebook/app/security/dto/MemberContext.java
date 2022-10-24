@@ -34,4 +34,21 @@ public class MemberContext extends User {
     public boolean memberIsNot(Member member) {
         return memberIs(member) == false;
     }
+
+    public Member getMember() {
+        return Member
+                .builder()
+                .id(id)
+                .createDate(createDate)
+                .modifyDate(modifyDate)
+                .username(username)
+                .email(email)
+                .nickname(nickname)
+                .build();
+    }
+
+    public boolean hasAuthority(String authorityName) {
+        return getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(authorityName));
+    }
 }

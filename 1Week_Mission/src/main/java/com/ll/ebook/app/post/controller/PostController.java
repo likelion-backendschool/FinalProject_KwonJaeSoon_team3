@@ -44,7 +44,7 @@ public class PostController {
             return "post/list";
         }
 
-        List<Post> posts = postService.getPostsBymemberIdAndKeyword(memberId, keyword);
+        List<Post> posts = postService.getPostsByMemberIdAndKeyword(memberId, keyword);
 
         model.addAttribute("posts", posts);
 
@@ -81,7 +81,7 @@ public class PostController {
     public String showModify(@AuthenticationPrincipal MemberContext context, Model model, @PathVariable Long id) {
         Post post =  postService.getForPrintPostById(id);
 
-        if (context.memberIsNot(post.getAuthorId())) {
+        if (context.memberIsNot(post.getMember())) {
             String msg = Util.url.encode("%d번 게시물을 수정할 수 없습니다.".formatted(id));
             return "redirect:/post/%d?msg=%s".formatted(id, msg);
         }
@@ -96,7 +96,7 @@ public class PostController {
     public String modify(@AuthenticationPrincipal MemberContext context, @PathVariable Long id, @Valid PostForm postForm) {
         Post post = postService.getForPrintPostById(id);
 
-        if (context.memberIsNot(post.getAuthorId())) {
+        if (context.memberIsNot(post.getMember())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         postService.modify(post, postForm.getSubject(), postForm.getContent(), postForm.getContentHtml(), postForm.getKeywords());
@@ -110,7 +110,7 @@ public class PostController {
     public String delete(@AuthenticationPrincipal MemberContext context, @PathVariable Long id) {
         Post post = postService.getForPrintPostById(id);
 
-        if(context.memberIsNot(post.getAuthorId())) {
+        if(context.memberIsNot(post.getMember())) {
             String msg = Util.url.encode("%d번 게시물을 삭제할 수 없습니다.".formatted(id));
             return "redirect:/post/%d?msg=%s".formatted(id, msg);
         }

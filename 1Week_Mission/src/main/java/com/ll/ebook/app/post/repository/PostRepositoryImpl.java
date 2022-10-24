@@ -26,16 +26,16 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
     }
 
     @Override
-    public List<Post> getPostsBymemberIdAndKeyword(Long memberId, String keyword) {
+    public List<Post> getPostsByMemberIdAndKeyword(Long memberId, String keyword) {
         return jpaQueryFactory
                 .selectFrom(post)
                 .innerJoin(member)
-                .on(post.authorId.id.eq(member.id))
+                .on(post.member.id.eq(member.id))
                 .innerJoin(postHashTag)
-                .on(post.id.eq(postHashTag.postId.id))
+                .on(post.id.eq(postHashTag.post.id))
                 .innerJoin(postKeyword)
-                .on(postHashTag.postKeywordId.id.eq(postKeyword.id))
-                .where(post.authorId.id.eq(memberId)
+                .on(postHashTag.postKeyword.id.eq(postKeyword.id))
+                .where(post.member.id.eq(memberId)
                         .and(
                                 postKeyword.content.eq(keyword)
                         )

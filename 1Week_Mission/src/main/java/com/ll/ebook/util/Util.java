@@ -1,8 +1,11 @@
 package com.ll.ebook.util;
 
+import org.springframework.stereotype.Component;
+
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+@Component
 public class Util {
     public static class url {
         public static boolean isUrl(String url) {
@@ -49,5 +52,9 @@ public class Util {
             }
         }
 
+    }
+
+    public String nf(long number) {
+        return String.format("%,d", (int) number);
     }
 }

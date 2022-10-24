@@ -1,7 +1,7 @@
 package com.ll.ebook.app.post.service;
 
 import com.ll.ebook.app.hashTag.entity.PostHashTag;
-import com.ll.ebook.app.hashTag.service.HashTagService;
+import com.ll.ebook.app.hashTag.service.PostHashTagService;
 import com.ll.ebook.app.member.entity.Member;
 import com.ll.ebook.app.post.entity.Post;
 import com.ll.ebook.app.post.repository.PostRepository;
@@ -14,7 +14,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
-    private final HashTagService hashTagService;
+    private final PostHashTagService postHashTagService;
 
     public List<Post> getPosts() {
         return postRepository.getPosts();
@@ -35,7 +35,7 @@ public class PostService {
     public Post write(Member member, String subject, String content, String contentHtml, String hashTagContents) {
         Post post = Post
                 .builder()
-                .authorId(member)
+                .member(member)
                 .subject(subject)
                 .content(content)
                 .contentHtml(contentHtml)
@@ -43,7 +43,7 @@ public class PostService {
 
         postRepository.save(post);
 
-        hashTagService.applyHashTags(post, hashTagContents);
+        postHashTagService.applyHashTags(post, hashTagContents);
 
         return post;
     }
@@ -61,7 +61,7 @@ public class PostService {
     }
 
     public void loadForPrintData(Post post) {
-        List<PostHashTag> hashTags = hashTagService.getHashTags(post);
+        List<PostHashTag> hashTags = postHashTagService.getHashTags(post);
 
         post.getExtra().put("hashTags", hashTags);
     }
@@ -72,7 +72,7 @@ public class PostService {
         post.setContentHtml(contentHtml);
         postRepository.save(post);
 
-        hashTagService.applyHashTags(post, keywords);
+        postHashTagService.applyHashTags(post, keywords);
     }
 
     public Post findById(Long id) {
@@ -83,7 +83,14 @@ public class PostService {
         postRepository.delete(post);
     }
 
-    public List<Post> getPostsBymemberIdAndKeyword(Long memberId, String keyword) {
-        return postRepository.getPostsBymemberIdAndKeyword(memberId, keyword);
+    public List<Post> getPostsByMemberIdAndKeyword(Long memberId, String keyword) {
+        return postRepository.getPostsByMemberIdAndKeyword(memberId, keyword);
+    }
+
+    public boolean actorCanSee(Member actor, Post post) {
+        if ( actor == null ) return false;
+        if ( post == null ) return false;
+
+        return post.getMember().getId().equals(actor.getId());
     }
 }

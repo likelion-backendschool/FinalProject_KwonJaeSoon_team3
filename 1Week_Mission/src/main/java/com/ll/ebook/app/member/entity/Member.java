@@ -4,9 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ll.ebook.app.base.entity.BaseEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Setter
@@ -26,5 +31,17 @@ public class Member extends BaseEntity {
 
     public Member(long id) {
         super(id);
+    }
+
+    public String getName() {
+        if (nickname != null) {
+            return nickname;
+        }
+
+        return username;
+    }
+
+    public String getJdenticon() {
+        return "member__" + getId();
     }
 }
