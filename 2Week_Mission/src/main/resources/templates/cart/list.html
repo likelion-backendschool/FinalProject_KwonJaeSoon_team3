@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html layout:decorate="~{/layout/layout}">
+
+<head>
+    <title>장바구니</title>
+</head>
+
+<body>
+<main layout:fragment="main">
+    <section class="section section-write container mx-auto">
+
+        <div class="px-2 pt-4">
+            <h1 class="font-bold text-lg">장바구니</h1>
+
+            <ul>
+                <li th:each="cartItem : ${cartItems}" class="flex items-center">
+                    <span th:text="|품목 : ${cartItem.product.subject}|"></span>
+                    <span th:text="|가격 : ${cartItem.product.price}|"></span>
+                </li>
+            </ul>
+        </div>
+    </section>
+</main>
+</body>
+</html>
