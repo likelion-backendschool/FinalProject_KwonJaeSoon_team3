@@ -13,4 +13,6 @@ public interface ProductHashTagRepository extends JpaRepository<ProductHashTag, 
     List<ProductHashTag> findAllByProductId(Long id);
 
     List<ProductHashTag> findAllByProductIdIn(long[] ids);
+
+    List<ProductHashTag> findAllByProductKeyword_contentOrderByProduct_idDesc(String productKeywordContent);
 }

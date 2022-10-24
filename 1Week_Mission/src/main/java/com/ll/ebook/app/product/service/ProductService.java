@@ -91,8 +91,18 @@ public class ProductService {
         return author.getId().equals(post.getMember().getId());
     }
 
+    public boolean actorCanModify(Member actor, Product product) {
+        if (actor == null) return false;
+
+        return actor.getId().equals(product.getMember().getId());
+    }
+
     public boolean actorCanRemove(Member author, Post post) {
         return actorCanModify(author, post);
+    }
+
+    public boolean actorCanRemove(Member actor, Product product) {
+        return actorCanModify(actor, product);
     }
 
     public List<Product> findAllForPrintByOrderByIdDesc(Member actor) {
@@ -127,5 +137,35 @@ public class ProductService {
 
     private List<Product> findAllByOrderByIdDesc() {
         return productRepository.findAllByOrderByIdDesc();
+    }
+
+    @Transactional
+    public void modify(Product product, String subject, int price, String productTagContents) {
+        product.setSubject(subject);
+        product.setPrice(price);
+
+        applyProductTags(product, productTagContents);
+    }
+
+    @Transactional
+    public void remove(Product product) {
+        productRepository.delete(product);
+    }
+
+    public List<ProductHashTag> getProductTags(String productHashTagContent, Member actor) {
+        List<ProductHashTag> productTags = productHashTagService.getProductTags(productHashTagContent);
+
+        loadForPrintDataOnProductTagList(productTags, actor);
+
+        return productTags;
+    }
+
+    private void loadForPrintDataOnProductTagList(List<ProductHashTag> productTags, Member actor) {
+        List<Product> products = productTags
+                .stream()
+                .map(ProductHashTag::getProduct)
+                .collect(toList());
+
+        loadForPrintData(products, actor);
     }
 }

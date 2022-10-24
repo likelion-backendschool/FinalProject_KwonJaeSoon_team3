@@ -52,6 +52,10 @@ public class ProductHashTagService {
         return productTagRepository.findAllByProductId(product.getId());
     }
 
+    public List<ProductHashTag> getProductTags(String productKeywordContent) {
+        return productTagRepository.findAllByProductKeyword_contentOrderByProduct_idDesc(productKeywordContent);
+    }
+
     private ProductHashTag saveProductHashTag(Product product, String productKeywordContent) {
         ProductKeyword productKeyword = productKeywordService.save(productKeywordContent);
 
