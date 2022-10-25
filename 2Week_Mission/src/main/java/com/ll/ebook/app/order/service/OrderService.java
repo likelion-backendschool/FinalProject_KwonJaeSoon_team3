@@ -84,13 +84,39 @@ public class OrderService {
         return orderRepository.findById(id);
     }
 
-    public void payByTossPayments(Order order) {
+    public void payByTossPayments(Order order, long useRestCash) {
         Member member = order.getMember();
         int payPrice = order.calculatePayPrice();
 
-        memberService.addCash(member, payPrice, "주문결제충전__토스페이먼츠");
-        memberService.addCash(member, payPrice * -1, "주문결제__토스페이먼츠");
+        long pgPayPrice = payPrice - useRestCash;
 
+        memberService.addCash(member, pgPayPrice, "주문결제충전__토스페이먼츠");
+        memberService.addCash(member, pgPayPrice * -1, "주문결제__토스페이먼츠");
+
+        if ( useRestCash > 0 ) {
+            memberService.addCash(member, useRestCash * -1, "주문__%d__사용__예치금".formatted(order.getId()));
+        }
+
+        order.setPaymentDone();
+        orderRepository.save(order);
+    }
+
+    public boolean actorCanPayment(Member member, Order order) {
+        return actorCanSee(member, order);
+    }
+
+    private boolean actorCanSee(Member member, Order order) {
+        return member.getId().equals(order.getMember().getId());
+    }
+
+    public void payByRestCashOnly(Order order) {
+        Member member = order.getMember();
+        long restCash = member.getRestCash();
+        int payPrice = order.calculatePayPrice();
+        if (payPrice > restCash) {
+            throw new RuntimeException("예치금이 부족합니다.");
+        }
+        memberService.addCash(member, payPrice * -1, "주문결제__예치금결제");
         order.setPaymentDone();
         orderRepository.save(order);
     }

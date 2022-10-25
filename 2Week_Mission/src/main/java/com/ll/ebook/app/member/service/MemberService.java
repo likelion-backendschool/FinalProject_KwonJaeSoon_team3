@@ -93,6 +93,8 @@ public class MemberService {
     }
 
     public long getRestCash(Member member) {
-        return member.getRestCash();
+        Member findMember = findMemberByUsername(member.getUsername());
+
+        return findMember.getRestCash();
     }
 }

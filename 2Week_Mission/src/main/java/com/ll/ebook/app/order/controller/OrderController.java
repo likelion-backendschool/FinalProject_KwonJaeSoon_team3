@@ -8,7 +8,9 @@ import com.ll.ebook.app.cart.service.CartItemService;
 import com.ll.ebook.app.member.entity.Member;
 import com.ll.ebook.app.member.service.MemberService;
 import com.ll.ebook.app.order.entity.Order;
+import com.ll.ebook.app.order.exception.ActorCanNotPayOrderException;
 import com.ll.ebook.app.order.exception.OrderIdNotMatchedException;
+import com.ll.ebook.app.order.exception.OrderNotEnoughRestCashException;
 import com.ll.ebook.app.order.exception.OrderNotFoundException;
 import com.ll.ebook.app.order.service.OrderService;
 import com.ll.ebook.app.product.entity.Product;
@@ -77,6 +79,25 @@ public class OrderController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @PostMapping("/{id}/pay")
+    public String payOrder(@AuthenticationPrincipal MemberContext memberContext, @PathVariable long id) {
+        Order order = orderService.findForPrintById(id).get();
+
+        Member member = memberContext.getMember();
+
+        long restCash = memberService.getRestCash(member);
+
+        if (orderService.actorCanPayment(member, order) == false) {
+            throw new ActorCanNotPayOrderException();
+        }
+
+        orderService.payByRestCashOnly(order);
+
+        String msg = Util.url.encode("카드결제가 완료되었습니다!");
+        return "redirect:/order/list?msg=%s".formatted(msg);
+    }
+
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/cancel")
     public String cancelOrder(@AuthenticationPrincipal MemberContext memberContext, @PathVariable Long id) {
         Member member = memberContext.getMember();
@@ -111,9 +132,9 @@ public class OrderController {
             @RequestParam String paymentKey,
             @RequestParam String orderId,
             @RequestParam Long amount,
-            Model model
+            Model model,
+            @AuthenticationPrincipal MemberContext memberContext
     ) throws Exception {
-
         Order order = orderService.findForPrintById(id).get();
 
         long orderIdInputed = Long.parseLong(orderId.split("__")[1]);
@@ -131,13 +152,21 @@ public class OrderController {
         payloadMap.put("orderId", orderId);
         payloadMap.put("amount", String.valueOf(amount));
 
+        Member member = memberContext.getMember();
+        long restCash = memberService.getRestCash(member);
+        long payPriceRestCash = order.calculatePayPrice() - amount;
+
+        if (payPriceRestCash > restCash) {
+            throw new OrderNotEnoughRestCashException();
+        }
+
         HttpEntity<String> request = new HttpEntity<>(objectMapper.writeValueAsString(payloadMap), headers);
 
         ResponseEntity<JsonNode> responseEntity = restTemplate.postForEntity(
                 "https://api.tosspayments.com/v1/payments/" + paymentKey, request, JsonNode.class);
 
         if (responseEntity.getStatusCode() == HttpStatus.OK) {
-            orderService.payByTossPayments(order);
+            orderService.payByTossPayments(order, payPriceRestCash);
 
             String msg = Util.url.encode("카드결제를 성공했습니다.");
             return "redirect:/order/list?msg=%s".formatted(msg);
@@ -146,7 +175,7 @@ public class OrderController {
             model.addAttribute("message", failNode.get("message").asText());
             model.addAttribute("code", failNode.get("code").asText());
             String msg = Util.url.encode("카드결제를 실패했습니다.");
-            return "redirect:/order/list?msg=%s".formatted(msg);
+            return "redirect:/order/%d?msg=%s".formatted(id, msg);
         }
     }
 
