@@ -72,8 +72,8 @@ public class OrderService {
         return orderRepository.findById(id);
     }
 
-    public void delete(Member member, Order order) {
-
+    public void delete(Order order) {
+        orderRepository.delete(order);
     }
 
     public Optional<Order> findForPrintById(long id) {

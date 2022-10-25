@@ -99,13 +99,12 @@ public class OrderController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/cancel")
-    public String cancelOrder(@AuthenticationPrincipal MemberContext memberContext, @PathVariable Long id) {
-        Member member = memberContext.getMember();
+    public String cancelOrder(@PathVariable Long id) {
         Order order = orderService.findOrderById(id).get();
 
-        orderService.delete(member, order);
+        orderService.delete(order);
 
-        String msg = Util.url.encode("주문이 완료되었습니다!");
+        String msg = Util.url.encode("주문이 취소되었습니다!");
         return "redirect:/order/list?msg=%s".formatted(msg);
     }
 
