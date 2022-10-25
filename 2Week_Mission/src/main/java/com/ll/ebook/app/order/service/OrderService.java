@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -45,6 +46,8 @@ public class OrderService {
             order.addOrderItem(orderItem);
         }
 
+        order.makeName();
+
         orderRepository.save(order);
 
         return order;
@@ -67,5 +70,28 @@ public class OrderService {
 
     public Optional<Order> findOrderById(Long id) {
         return orderRepository.findById(id);
+    }
+
+    public void delete(Member member, Order order) {
+
+    }
+
+    public Optional<Order> findForPrintById(long id) {
+        return findById(id);
+    }
+
+    private Optional<Order> findById(long id) {
+        return orderRepository.findById(id);
+    }
+
+    public void payByTossPayments(Order order) {
+        Member member = order.getMember();
+        int payPrice = order.calculatePayPrice();
+
+        memberService.addCash(member, payPrice, "주문결제충전__토스페이먼츠");
+        memberService.addCash(member, payPrice * -1, "주문결제__토스페이먼츠");
+
+        order.setPaymentDone();
+        orderRepository.save(order);
     }
 }

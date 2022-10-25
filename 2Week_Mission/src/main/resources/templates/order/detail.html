@@ -7,6 +7,16 @@
 
 <body>
 <main layout:fragment="main">
+    <script src="https://js.tosspayments.com/v1/payment"></script>
+
+
+    <script th:inline="javascript">
+        const orderId = /*[[ ${order.id} ]]*/ null;
+        const buyerName = /*[[ ${order.member.username} ]]*/ null;
+        const orderName = /*[[ ${order.name} ]]*/ null;
+        const orderPayPrice = /*[[ ${order.calculatePayPrice} ]]*/ null;
+    </script>
+
     <section class="section section-write container mx-auto">
 
         <div class="px-2 pt-4">
@@ -19,60 +29,63 @@
                     <div th:text="${order.id}"></div>
                 </div>
                 <div>
-                    <div class="badge badge-primary">주문명</div>
-
-                    <div th:text="${order.name}"></div>
-                </div>
-                <div>
                     <div class="badge badge-primary">주문자</div>
 
                     <div th:text="${order.member.username}"></div>
                 </div>
                 <div>
-                    <div class="badge badge-primary">작성날짜</div>
+                    <div class="badge badge-primary">주문 가격</div>
 
-                    <div th:text="${order.createDate}"></div>
+                    <div th:text="${order.calculatePayPrice}"></div>
                 </div>
-                <div>
-                    <div class="badge badge-primary">결제 여부</div>
 
-                    <div th:utext="${order.readyStatus}"></div>
-                </div>
-                <div>
-                    <div class="badge badge-primary">결제날짜</div>
-
-                    <div th:text="${order.payDate}"></div>
-                </div>
-                <div>
-                    <div class="badge badge-primary">송금 여부</div>
-
-                    <div th:text="${order.isPaid}"></div>
-                </div>
-                <div>
-                    <div class="badge badge-primary">취소 여부</div>
-
-                    <div th:text="${order.isCanceled}"></div>
-                </div>
-                <div>
-                    <div class="badge badge-primary">환불 여부</div>
-
-                    <div th:text="${order.isRefunded}"></div>
-                </div>
 
             </div>
             <div class="py-3">
-                <a th:href="@{|/order/list|}" class="btn btn-sm btn-secondary">목록</a>
+                <form id="payItemForm" th:action="@{|/order/${order.id}/pay|}" method="post">
+                    <div class="form-control">
+                        <div>
+                            보유 예치금 : [[${restCash}]]
+                        </div>
+                    </div>
+                    <div>
+                        <input type="number" id="PaymentForm__useRestCash" placeholder="사용할 예치금" class="input input-bordered min-w-[300px]" min="0" th:max="${order.calculatePayPrice > restCash ? restCash : order.calculatePayPrice}">
+                    </div>
+                    <span th:if="${order.isPaid}">결제완료</span>
+                </form>
                 <a onclick="payItemForm__Submit();" class="btn btn-sm btn-secondary" sec:authorize="isAuthenticated()">
-                    <span>결제하기</span>
+                    <span>예치금결제</span>
                 </a>
-                <form id="payItemForm" th:action="@{|/order/${order.id}/pay|}" method="post" hidden></form>
+                <div>
+                    <button onclick="payment();" class="btn btn-sm btn-primary">카드결제</button>
+                </div>
                 <a onclick="cancelItemForm__Submit();" class="btn btn-sm btn-secondary" sec:authorize="isAuthenticated()">
                     <span>주문취소</span>
                 </a>
                 <form id="cancelItemForm" th:action="@{|/order/${order.id}/cancel|}" method="post" hidden></form>
+                <a th:href="@{|/order/list|}" class="btn btn-sm btn-secondary">목록</a>
             </div>
         </div>
     </section>
+
+    <script>
+        const tossPayments = TossPayments("test_ck_YPBal2vxj81bayeX5Ay35RQgOAND");
+
+        function payment() {
+            const method = "카드"; // "카드" 혹은 "가상계좌"
+
+            const paymentData = {
+                amount: orderPayPrice,
+                orderId: "order__" + orderId + "__" + (Math.random() + "").substring(2),
+                orderName : "결제",
+                customerName: buyerName,
+                successUrl: window.location.origin + "/order/" + orderId + "/success",
+                failUrl: window.location.origin + "/order/" + orderId + "/fail"
+            };
+
+            tossPayments.requestPayment(method, paymentData);
+        }
+    </script>
 </main>
 </body>
 </html>

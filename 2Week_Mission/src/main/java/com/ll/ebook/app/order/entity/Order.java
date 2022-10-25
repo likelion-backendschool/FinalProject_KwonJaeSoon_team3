@@ -38,6 +38,7 @@ public class Order extends BaseEntity {
     private boolean isCanceled;
     private boolean isRefunded;
     private String name;
+    private int totalPrice;
 
     @Builder.Default
     @OneToMany(mappedBy = "order", cascade = ALL, orphanRemoval = true)
@@ -56,12 +57,25 @@ public class Order extends BaseEntity {
             payPrice += orderItem.calculatePayPrice();
         }
 
+        this.totalPrice = payPrice;
+
         return payPrice;
     }
 
     public void setPaymentDone() {
         for ( OrderItem orderItem : orderItems ) {
             orderItem.setPaymentDone();
+        }
+        isPaid = true;
+    }
+
+    public void makeName() {
+        String name = orderItems.get(0).getProduct().getSubject();
+
+        if (orderItems.size() > 1) {
+            name += " 외 %d개".formatted(orderItems.size() - 1);
+
+            this.name = name;
         }
     }
 

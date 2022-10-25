@@ -70,6 +70,7 @@ public class Rq {
     }
 
     public static String urlWithMsg(String url, String msg) {
+        msg = Util.url.encode(msg);
         return Util.url.modifyQueryParam(url, "msg", msgWithTtl(msg));
     }
 
@@ -82,6 +83,7 @@ public class Rq {
     }
 
     public static String redirectWithMsg(String url, String msg) {
+        msg = Util.url.encode(msg);
         return "redirect:" + urlWithMsg(url, msg);
     }
 
