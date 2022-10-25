@@ -59,4 +59,8 @@ public class OrderService {
         memberService.addCash(member, payPrice * -1, "주문결제__예치금결제");
         orderRepository.save(order);
     }
+
+    public List<Order> findAllByMemberId(Long memberId) {
+        return orderRepository.findAllByMemberId(memberId);
+    }
 }
