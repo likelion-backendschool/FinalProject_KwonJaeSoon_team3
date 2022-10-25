@@ -32,4 +32,18 @@ public class CartItemService {
     public List<CartItem> findAll() {
         return cartItemRepository.findAll();
     }
+
+    public boolean memberCanRemove(Member member, Product product) {
+        if (member == null) return false;
+
+        return member.getId().equals(product.getMember().getId());
+    }
+
+    public void remove(Member member, Product product) {
+        CartItem opCartItem = cartItemRepository.findByMemberIdAndProductId(member.getId(), product.getId()).orElse(null);
+
+        if(opCartItem != null) {
+            cartItemRepository.delete(opCartItem);
+        }
+    }
 }

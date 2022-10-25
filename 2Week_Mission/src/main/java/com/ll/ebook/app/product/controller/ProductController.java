@@ -104,16 +104,16 @@ public class ProductController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/remove")
     public String remove(@PathVariable long id) {
-        Product post = productService.findById(id).get();
+        Product product = productService.findById(id).get();
         Member actor = rq.getMember();
 
-        if (productService.actorCanRemove(actor, post) == false) {
+        if (productService.actorCanRemove(actor, product) == false) {
             throw new ActorCanNotRemoveException();
         }
 
-        productService.remove(post);
+        productService.remove(product);
 
-        return Rq.redirectWithMsg("/post/list", "%d번 글이 삭제되었습니다.".formatted(post.getId()));
+        return Rq.redirectWithMsg("/post/list", "%d번 글이 삭제되었습니다.".formatted(product.getId()));
     }
 
     @GetMapping("/tag/{tagContent}")

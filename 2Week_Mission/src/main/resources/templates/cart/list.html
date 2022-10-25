@@ -16,6 +16,10 @@
                 <li th:each="cartItem : ${cartItems}" class="flex items-center">
                     <span th:text="|품목 : ${cartItem.product.subject}|"></span>
                     <span th:text="|가격 : ${cartItem.product.price}|"></span>
+                    <a onclick="deleteItemForm__Submit();" sec:authorize="isAuthenticated()">
+                        <span>삭제하기</span>
+                    </a>
+                    <form id="deleteItemForm" th:action="@{|/cart/remove/${cartItem.id}|}" method="post" hidden></form>
                 </li>
             </ul>
         </div>
