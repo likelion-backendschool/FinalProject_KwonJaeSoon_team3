@@ -22,6 +22,12 @@
                     <form id="deleteItemForm" th:action="@{|/cart/remove/${cartItem.id}|}" method="post" hidden></form>
                 </li>
             </ul>
+
+            <a onclick="OrderItemForm__Submit();" sec:authorize="isAuthenticated()">
+                <span>주문하기</span>
+            </a>
+            <form id="orderItemForm" th:action="@{/order/create}" method="post" hidden></form>
+
         </div>
     </section>
 </main>

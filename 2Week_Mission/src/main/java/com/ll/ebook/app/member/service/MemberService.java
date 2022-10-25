@@ -1,5 +1,7 @@
 package com.ll.ebook.app.member.service;
 
+import com.ll.ebook.app.cash.entity.CashLog;
+import com.ll.ebook.app.cash.service.CashLogService;
 import com.ll.ebook.app.member.entity.Member;
 import com.ll.ebook.app.member.repository.MemberRepository;
 import com.ll.ebook.app.security.dto.MemberContext;
@@ -15,6 +17,8 @@ import java.util.Optional;
 public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CashLogService cashLogService;
+
 
     public Member join(String username, String password, String nickname, String email) {
         int authLevel = 3;
@@ -75,5 +79,20 @@ public class MemberService {
         member.setPassword(encodePassword);
 
         memberRepository.save(member);
+    }
+
+    @Transactional
+    public long addCash(Member member, long price, String eventType) {
+        CashLog cashLog = cashLogService.addCash(member, price, eventType);
+
+        long newRestCash = member.getRestCash() + cashLog.getPrice();
+        member.setRestCash(newRestCash);
+        memberRepository.save(member);
+
+        return newRestCash;
+    }
+
+    public long getRestCash(Member member) {
+        return member.getRestCash();
     }
 }

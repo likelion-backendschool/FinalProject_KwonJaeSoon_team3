@@ -4,13 +4,15 @@ import com.ll.ebook.app.cart.entity.CartItem;
 import com.ll.ebook.app.cart.service.CartItemService;
 import com.ll.ebook.app.member.entity.Member;
 import com.ll.ebook.app.member.service.MemberService;
+import com.ll.ebook.app.order.entity.Order;
+import com.ll.ebook.app.order.service.OrderService;
 import com.ll.ebook.app.post.entity.Post;
 import com.ll.ebook.app.post.service.PostService;
 import com.ll.ebook.app.product.entity.Product;
 import com.ll.ebook.app.product.service.ProductService;
 
 public interface InitDataBefore {
-    default void before(MemberService memberService, PostService postService, ProductService productService, CartItemService cartItemService) {
+    default void before(MemberService memberService, PostService postService, ProductService productService, CartItemService cartItemService, OrderService orderService) {
         Member member1 = memberService.join("user1", "1234", "jaesoon","user1@test.com");
         Member member2 = memberService.join("user2", "1234", "jaesoon2", "user2@test.com");
 
@@ -30,5 +32,11 @@ public interface InitDataBefore {
         CartItem cartItem3 = cartItemService.addItem(member1, product3);
         CartItem cartItem4 = cartItemService.addItem(member1, product4);
 
+        memberService.addCash(member1, 100_000_000, "충전__무통장입금");
+
+//
+//        Order order1 = orderService.createFromCart(member1);
+//
+//        orderService.order(order1);
     }
 }

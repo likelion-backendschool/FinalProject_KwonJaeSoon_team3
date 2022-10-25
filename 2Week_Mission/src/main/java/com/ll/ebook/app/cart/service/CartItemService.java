@@ -46,4 +46,12 @@ public class CartItemService {
             cartItemRepository.delete(opCartItem);
         }
     }
+
+    public List<CartItem> getItemsByMember(Member member) {
+        return cartItemRepository.findAllByMemberId(member.getId());
+    }
+
+    public void deleteItem(CartItem cartItem) {
+        cartItemRepository.delete(cartItem);
+    }
 }
