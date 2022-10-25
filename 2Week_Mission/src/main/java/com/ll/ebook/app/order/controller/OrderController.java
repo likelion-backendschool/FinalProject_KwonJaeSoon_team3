@@ -5,6 +5,7 @@ import com.ll.ebook.app.cart.exception.EmptyProductException;
 import com.ll.ebook.app.cart.service.CartItemService;
 import com.ll.ebook.app.member.entity.Member;
 import com.ll.ebook.app.order.entity.Order;
+import com.ll.ebook.app.order.exception.OrderNotFoundException;
 import com.ll.ebook.app.order.service.OrderService;
 import com.ll.ebook.app.product.entity.Product;
 import com.ll.ebook.app.security.dto.MemberContext;
@@ -47,4 +48,20 @@ public class OrderController {
 
         return "order/list";
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{id}")
+    public String showList(@PathVariable Long id, Model model) {
+        Order order = orderService.findOrderById(id).orElse(null);
+
+        if(order == null) {
+            throw new OrderNotFoundException();
+        }
+
+        model.addAttribute("order", order);
+
+        return "order/detail";
+    }
+
+
 }

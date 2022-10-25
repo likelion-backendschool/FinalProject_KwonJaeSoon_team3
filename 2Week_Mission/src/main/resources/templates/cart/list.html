@@ -14,8 +14,10 @@
 
             <ul>
                 <li th:each="cartItem : ${cartItems}" class="flex items-center">
-                    <span th:text="|품목 : ${cartItem.product.subject}|"></span>
-                    <span th:text="|가격 : ${cartItem.product.price}|"></span>
+                    <a th:href="@{|/order/${cartItem.id}|}">
+                        <span th:text="|품목 : ${cartItem.product.subject}|"></span>
+                        <span th:text="|가격 : ${cartItem.product.price}|"></span>
+                    </a>
                     <a onclick="deleteItemForm__Submit();" sec:authorize="isAuthenticated()">
                         <span>삭제하기</span>
                     </a>
@@ -23,11 +25,11 @@
                 </li>
             </ul>
 
-            <a onclick="OrderItemForm__Submit();" sec:authorize="isAuthenticated()">
+            <a onclick="OrderItemForm__Submit();" class="btn btn-sm btn-secondary" sec:authorize="isAuthenticated()">
                 <span>주문하기</span>
             </a>
             <form id="orderItemForm" th:action="@{/order/create}" method="post" hidden></form>
-
+            <a th:href="@{|/order/list|}" class="btn btn-sm btn-secondary">주문 목록</a>
         </div>
     </section>
 </main>

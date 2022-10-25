@@ -16,14 +16,15 @@
                 <li th:each="order : ${orderList}" class="flex items-center">
                     <span th:text="|번호 : ${order.id}|"></span>
                     <span th:text="|주문명 : ${order.name}|"></span>
-                    <a onclick="payItemForm__Submit();" sec:authorize="isAuthenticated()">
+                    <a onclick="payItemForm__Submit();" class="btn btn-sm btn-secondary" sec:authorize="isAuthenticated()">
                         <span>결제하기</span>
                     </a>
                     <form id="payItemForm" th:action="@{|/order/${order.id}/pay|}" method="post" hidden></form>
-                    <a onclick="cancelItemForm__Submit();" sec:authorize="isAuthenticated()">
+                    <a onclick="cancelItemForm__Submit();" class="btn btn-sm btn-secondary" sec:authorize="isAuthenticated()">
                         <span>주문취소</span>
                     </a>
                     <form id="cancelItemForm" th:action="@{|/order/${order.id}/cancel|}" method="post" hidden></form>
+                    <a th:href="@{|/order/${order.id}|}" class="btn btn-sm btn-secondary">상세주문</a>
                 </li>
             </ul>
 

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -62,5 +63,9 @@ public class OrderService {
 
     public List<Order> findAllByMemberId(Long memberId) {
         return orderRepository.findAllByMemberId(memberId);
+    }
+
+    public Optional<Order> findOrderById(Long id) {
+        return orderRepository.findById(id);
     }
 }
