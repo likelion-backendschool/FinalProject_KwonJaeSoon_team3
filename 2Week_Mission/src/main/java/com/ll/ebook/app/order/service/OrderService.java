@@ -3,6 +3,7 @@ package com.ll.ebook.app.order.service;
 import com.ll.ebook.app.cart.entity.CartItem;
 import com.ll.ebook.app.cart.service.CartItemService;
 import com.ll.ebook.app.member.entity.Member;
+import com.ll.ebook.app.member.service.MemberService;
 import com.ll.ebook.app.order.entity.Order;
 import com.ll.ebook.app.order.entity.OrderItem;
 import com.ll.ebook.app.order.repository.OrderRepository;
@@ -17,6 +18,7 @@ import java.util.List;
 public class OrderService {
     private final CartItemService cartItemService;
     private final OrderRepository orderRepository;
+    private final MemberService memberService;
 
     public Order createFromCart(Member member) {
         List<CartItem> cartItems = cartItemService.getItemsByMember(member);
@@ -47,8 +49,14 @@ public class OrderService {
         return order;
     }
 
-    public void order(Order order) {
+    public void orderByRestCash(Order order) {
+        Member member = order.getMember();
+        long restCash = member.getRestCash();
+
+        int payPrice = order.calculatePayPrice();
+
         order.setPaymentDone();
+        memberService.addCash(member, payPrice * -1, "주문결제__예치금결제");
         orderRepository.save(order);
     }
 }
