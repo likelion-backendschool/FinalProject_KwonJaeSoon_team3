@@ -106,6 +106,18 @@
                     글 리스트
                 </span>
             </a>
+            <a href="/cart/list" class="inline-flex" sec:authorize="isAuthenticated()">
+                <i class="fa-solid fa-user"></i>
+                <span class="ml-[2px] hidden sm:block">
+                    장바구니
+                </span>
+            </a>
+            <a href="/product/list" class="inline-flex">
+                <i class="fa-solid fa-user"></i>
+                <span class="ml-[2px] hidden sm:block">
+                    상품리스트
+                </span>
+            </a>
         </div>
     </div>
 </header>
