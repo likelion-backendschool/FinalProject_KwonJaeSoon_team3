@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html layout:decorate="~{/layout/layout}">
+
+<head>
+    <title>글 상세페이지</title>
+</head>
+
+<body>
+<main layout:fragment="main">
+    <section class="section section-write container mx-auto">
+
+        <div class="px-2 pt-4">
+            <h1 class="font-bold text-lg">글 상세페이지</h1>
+
+            <div class="flex flex-col gap-3 mt-3">
+                <div>
+                    <div class="badge badge-primary">번호</div>
+
+                    <div th:text="${post.id}"></div>
+                </div>
+                <div>
+                    <div class="badge badge-primary">제목</div>
+
+                    <div th:text="${post.subject}"></div>
+                </div>
+                <div>
+                    <div class="badge badge-primary">작성자</div>
+
+                    <div th:text="${post.member.username}"></div>
+                </div>
+                <div>
+                    <div class="badge badge-primary">작성날짜</div>
+
+                    <div th:text="${post.createDate}"></div>
+                </div>
+                <div>
+                    <div class="badge badge-primary">수정날짜</div>
+
+                    <div th:text="${post.modifyDate}"></div>
+                </div>
+                <div>
+                    <div class="badge badge-primary">내용</div>
+
+                    <div th:utext="${@markDown.markdown(post.content)}"></div>
+                </div>
+                <div>
+                    <div class="badge badge-primary">해시태그</div>
+
+                    <th:block th:utext="${post.extra_hashTagLinks}"/>
+                </div>
+            </div>
+            <div class="py-3">
+                <a th:href="@{|/post/list|}" class="btn btn-sm btn-secondary">목록</a>
+                <a th:href="@{|/post/${post.id}/modify|}" class="btn btn-sm btn-secondary">수정</a>
+                <a onclick="return confirm('정말로 삭제하시겠습니까?')" th:href="@{|/post/${post.id}/delete|}" class="btn btn-sm btn-secondary">삭제</a>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>

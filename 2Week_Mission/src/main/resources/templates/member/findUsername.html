@@ -1,0 +1,30 @@
+<h1>아이디 찾기</h1>
+
+<script>
+    function FindUsernameForm__submit(form) {
+        form.email.value = form.email.value.trim();
+
+        if ( form.email.value.length == 0 ) {
+            alert("이메일을 입력해주세요.");
+            form.email.focus();
+            return;
+        }
+
+        form.submit();
+    }
+
+</script>
+
+
+<form th:action method="POST" onsubmit="FindUsernameForm__submit(this); return false;">
+    <div>
+        <span>이메일</span>
+        <input type="email" name="email">
+    </div>
+    <div>
+        <span>찾기</span>
+        <input type="submit" value="찾기">
+    </div>
+</form>
+
+<span th:if="${member != null}" th:text="${member.username}"></span>

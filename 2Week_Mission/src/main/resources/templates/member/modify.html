@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html layout:decorate="~{/layout/layout}">
+
+<head>
+  <title>회원정보수정</title>
+</head>
+
+<body>
+<main layout:fragment="main">
+    <section class="section section-login flex-grow flex flex-col items-center justify-center">
+
+        <div class="max-w-md w-full px-2 pt-4">
+            <h1 class="font-bold text-lg">회원정보 수정</h1>
+
+            <script>
+                function ModifyForm__submit(form) {
+                    form.nickname.value = form.nickname.value.trim();
+
+                    if (form.username.value.length == 0) {
+                        alert("작가명을 입력해주세요.");
+                        form.nickname.focus();
+                        return;
+                    }
+
+                    form.email.value = form.email.value.trim();
+
+                    if (form.password.value.length == 0) {
+                        alert("이메일을 입력해주세요.");
+                        form.email.focus();
+                        return;
+                    }
+
+                    form.submit();
+                }
+
+            </script>
+
+
+            <form th:action method="POST" onSubmit="ModifyForm__submit(this); return false;">
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">아이디</span>
+                    </label>
+                    <span class="input input-bordered" th:text="${#authentication.principal.username}">
+                    </span>
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">작가명</span>
+                    </label>
+                    <input autofocus type="text" name="nickname" placeholder="작가명" class="input input-bordered" maxlength="50" th:value="${#authentication.principal.nickname}">
+                </div>
+                <div class="form-control">
+                    <label class="label">
+                        <span class="label-text">이메일</span>
+                    </label>
+                    <input autofocus type="text" name="email" placeholder="이메일" class="input input-bordered" maxlength="50" th:value="${#authentication.principal.email}">
+                </div>
+                <div class="grid grid-cols-2 mt-2 gap-2">
+                    <input class="btn btn-primary" type="submit" value="수정">
+                </div>
+            </form>
+        </div>
+    </section>
+</main>
+</body>
+</html>

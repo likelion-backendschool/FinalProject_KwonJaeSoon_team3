@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html layout:decorate="~{/layout/layout}">
+
+<head>
+    <title>주문목록</title>
+</head>
+
+<body>
+<main layout:fragment="main">
+    <section class="section section-write container mx-auto">
+
+        <div class="px-2 pt-4">
+            <h1 class="font-bold text-lg">주문목록</h1>
+
+            <ul>
+                <li th:each="order : ${orderList}" class="flex items-center">
+                    <span th:text="|번호 : ${order.id}|"></span>
+                    <span th:text="|주문명 : ${order.name}|"></span>
+                    <form id="payItemForm" th:action="@{|/order/${order.id}/pay|}" method="post" hidden></form>
+                    <a onclick="cancelItemForm__Submit();" class="btn btn-sm btn-secondary" sec:authorize="isAuthenticated()">
+                        <span>주문취소</span>
+                    </a>
+                    <form id="cancelItemForm" th:action="@{|/order/${order.id}/cancel|}" method="post" hidden></form>
+                    <a th:href="@{|/order/${order.id}|}" class="btn btn-sm btn-secondary">상세주문</a>
+                </li>
+            </ul>
+
+        </div>
+    </section>
+</main>
+</body>
+</html>
