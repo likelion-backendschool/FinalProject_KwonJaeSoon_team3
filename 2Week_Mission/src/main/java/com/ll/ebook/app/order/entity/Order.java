@@ -66,6 +66,7 @@ public class Order extends BaseEntity {
         for ( OrderItem orderItem : orderItems ) {
             orderItem.setPaymentDone();
         }
+        readyStatus = true;
         isPaid = true;
     }
 

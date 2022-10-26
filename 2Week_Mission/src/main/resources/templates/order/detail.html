@@ -65,8 +65,6 @@
                                type="checkbox" class="ml-2 checkbox">
                     </label>
                 </div>
-                <button th:if="${!order.isPaid}" onclick="payment();" class="btn btn-sm btn-primary">카드결제</button>
-                <span th:if="${order.isPaid}">결제완료</span>
                 <div>
                     <div>
                         <span>PG결제가격 : </span>
@@ -75,6 +73,9 @@
                         </span>
                     </div>
                 </div>
+                <button th:if="${!order.isPaid}" onclick="payment();" class="btn btn-sm btn-primary">카드결제</button>
+                <span th:if="${order.isPaid}">결제완료</span>
+
                 <a onclick="cancelItemForm__Submit();" class="btn btn-sm btn-secondary" sec:authorize="isAuthenticated()">
                     <span>주문취소</span>
                 </a>
